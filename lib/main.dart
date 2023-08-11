@@ -11,7 +11,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+      theme: ThemeData(
+          primaryColor: const Color.fromARGB(255, 255, 68, 55),
+          scaffoldBackgroundColor: Colors.white),
       home: const SignupScreen(),
     );
   }

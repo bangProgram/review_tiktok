@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:review_tiktok/account/views/emailadress_screen.dart';
 import 'package:review_tiktok/account/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class UsernameScreen extends StatefulWidget {
-  const UsernameScreen({super.key});
+class EmailAdressScreen extends StatefulWidget {
+  const EmailAdressScreen({super.key});
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  State<EmailAdressScreen> createState() => _EmailAdressScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class _EmailAdressScreenState extends State<EmailAdressScreen> {
   final TextEditingController _textController = TextEditingController();
 
-  String _userName = "";
+  String _userEmail = "";
   bool _valid = false;
 
   void _focusOut(BuildContext context) {
@@ -26,14 +25,14 @@ class _UsernameScreenState extends State<UsernameScreen> {
   void initState() {
     super.initState();
     _textController.addListener(() {
-      _userName = _textController.text;
+      _userEmail = _textController.text;
       _validUserName();
     });
   }
 
   void _validUserName() {
-    print('$_userName / ${_userName.length}');
-    if (_userName != "" && _userName.length >= 3) {
+    print('$_userEmail / ${_userEmail.length}');
+    if (_userEmail != "" && _userEmail.length >= 3) {
       _valid = true;
     } else {
       _valid = false;
@@ -89,7 +88,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 ),
                 Gaps.v28,
                 const Text(
-                  'Create username',
+                  'Create with your Email',
                   style: TextStyle(
                     fontSize: Sizes.size24,
                     fontWeight: FontWeight.bold,
@@ -97,13 +96,14 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 ),
                 Gaps.v16,
                 Text(
-                  'You can always change this later.',
+                  'You can valdate account.',
                   style: TextStyle(
                     color: Colors.grey.shade500,
                   ),
                 ),
                 Gaps.v32,
                 TextField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _textController,
                   cursorColor: Theme.of(context).primaryColor,
                   cursorWidth: Sizes.size3,
@@ -118,7 +118,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
                         color: Colors.grey.shade400,
                       ),
                     ),
-                    hintText: ' Input Username',
+                    hintText: ' Input your Email',
                   ),
                 ),
                 Gaps.v28,
