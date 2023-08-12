@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/account/login/views/login_form_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
@@ -9,6 +10,14 @@ class LoginScreen extends StatelessWidget {
 
   void _goSignupScreen(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _goLoginForm(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginFormScreen(),
+      ),
+    );
   }
 
   @override
@@ -39,6 +48,7 @@ class LoginScreen extends StatelessWidget {
               ),
               Gaps.v32,
               ButtonWidget(
+                buttonFunction: () => _goLoginForm(context),
                 buttonIcon: FontAwesomeIcons.user,
                 buttonText: 'Use email & password',
               ),

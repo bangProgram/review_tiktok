@@ -13,6 +13,11 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
           primaryColor: const Color.fromARGB(255, 255, 68, 55),
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            foregroundColor: Colors.black,
+          ),
           scaffoldBackgroundColor: Colors.white),
       home: const SignupScreen(),
     );

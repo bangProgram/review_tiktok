@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class NextPageButtonWidget extends StatelessWidget {
+class LoginButtonWidget extends StatelessWidget {
   final Function() funtcion;
   final String text;
   final bool valid;
 
-  const NextPageButtonWidget({
+  const LoginButtonWidget({
     super.key,
     required this.funtcion,
     required this.text,
@@ -21,7 +21,7 @@ class NextPageButtonWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: Sizes.size20),
         decoration: BoxDecoration(
           color: valid ? Theme.of(context).primaryColor : Colors.grey.shade400,
-          borderRadius: BorderRadius.circular(Sizes.size10),
+          borderRadius: BorderRadius.circular(Sizes.size8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

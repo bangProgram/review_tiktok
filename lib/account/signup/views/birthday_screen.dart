@@ -1,22 +1,26 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:review_tiktok/account/views/emailadress_screen.dart';
-import 'package:review_tiktok/account/widgets/nextpage_button_widget.dart';
+import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/tutorial/views/tutorial_main_screen.dart';
 
-class UsernameScreen extends StatefulWidget {
-  const UsernameScreen({super.key});
+class BirthdayScreen extends StatefulWidget {
+  const BirthdayScreen({super.key});
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  State<BirthdayScreen> createState() => _BirthdayScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class _BirthdayScreenState extends State<BirthdayScreen> {
   final TextEditingController _textController = TextEditingController();
-
-  String _userName = "";
-  bool _valid = false;
+  final DateTime _initDate = DateTime(
+    DateTime.now().year - 20,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+  String? _setDate;
 
   void _focusOut(BuildContext context) {
     FocusScope.of(context).unfocus();
@@ -25,32 +29,28 @@ class _UsernameScreenState extends State<UsernameScreen> {
   @override
   void initState() {
     super.initState();
-    _textController.addListener(() {
-      _userName = _textController.text;
-      _validUserName();
-    });
+    _setDateTime();
   }
 
-  void _validUserName() {
-    print('$_userName / ${_userName.length}');
-    if (_userName != "" && _userName.length >= 3) {
-      _valid = true;
-    } else {
-      _valid = false;
-    }
-    setState(() {});
+  void _setDateTime() {
+    print(_initDate);
+    _setDate = _initDate.toString().split(" ").first;
+    _textController.value = TextEditingValue(text: _setDate!);
   }
 
   void _goNextPage() {
-    if (_valid) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const EmailAdressScreen(),
-        ),
-      );
-    } else {
-      return;
-    }
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const TutorialMainScreen(),
+      ),
+      (route) => false,
+    );
+  }
+
+  void _changeDate(DateTime date) {
+    _setDate = date.toString().split(" ").first;
+    _textController.value = TextEditingValue(text: _setDate!);
+    setState(() {});
   }
 
   @override
@@ -58,6 +58,16 @@ class _UsernameScreenState extends State<UsernameScreen> {
     return GestureDetector(
       onTap: () => _focusOut(context),
       child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Sign up'),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const FaIcon(FontAwesomeIcons.circleQuestion),
+            )
+          ],
+        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(
@@ -66,30 +76,9 @@ class _UsernameScreenState extends State<UsernameScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Skip',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: Sizes.size18,
-                      ),
-                    ),
-                    const Text(
-                      'Sign up',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: Sizes.size18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const FaIcon(FontAwesomeIcons.circleQuestion),
-                  ],
-                ),
                 Gaps.v28,
                 const Text(
-                  'Create username',
+                  "When's your birthday?",
                   style: TextStyle(
                     fontSize: Sizes.size24,
                     fontWeight: FontWeight.bold,
@@ -97,16 +86,18 @@ class _UsernameScreenState extends State<UsernameScreen> {
                 ),
                 Gaps.v16,
                 Text(
-                  'You can always change this later.',
+                  "Your birthday won't be shown publicly.",
                   style: TextStyle(
                     color: Colors.grey.shade500,
                   ),
                 ),
                 Gaps.v32,
                 TextField(
+                  enabled: false,
+                  style: const TextStyle(
+                    color: Colors.black,
+                  ),
                   controller: _textController,
-                  cursorColor: Theme.of(context).primaryColor,
-                  cursorWidth: Sizes.size3,
                   decoration: InputDecoration(
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
@@ -118,16 +109,27 @@ class _UsernameScreenState extends State<UsernameScreen> {
                         color: Colors.grey.shade400,
                       ),
                     ),
-                    hintText: ' Input Username',
                   ),
                 ),
                 Gaps.v28,
                 NextPageButtonWidget(
                   funtcion: () => _goNextPage(),
                   text: 'Go Next',
-                  valid: _valid,
+                  valid: true,
                 ),
               ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: SizedBox(
+            height: 250,
+            child: CupertinoDatePicker(
+              initialDateTime: _initDate,
+              mode: CupertinoDatePickerMode.date,
+              dateOrder: DatePickerDateOrder.ymd,
+              onDateTimeChanged: _changeDate,
+              maximumDate: _initDate,
             ),
           ),
         ),

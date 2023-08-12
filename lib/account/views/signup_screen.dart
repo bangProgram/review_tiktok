@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/account/signup/views/username_screen.dart';
 import 'package:review_tiktok/account/views/login_screen.dart';
-import 'package:review_tiktok/account/views/username_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
