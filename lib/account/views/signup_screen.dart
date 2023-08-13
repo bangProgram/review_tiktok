@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/account/signup/views/username_screen.dart';
@@ -5,15 +6,17 @@ import 'package:review_tiktok/account/views/login_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/tutorial/views/tutorial_sub_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
   void _goLoginScreen(BuildContext context) {
-    Navigator.of(context).push(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const LoginScreen(),
       ),
+      (route) => false,
     );
   }
 
@@ -24,6 +27,16 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _goServiesOf(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const TutorialSubScreen(),
+      ),
+    );
+  }
+
+// text: InlineSpan('By continuing, you agree to our Terms of Service and acknowledge that you have read our Privacy Policy to learn how we collect, use, and share your data.')
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +80,58 @@ class SignupScreen extends StatelessWidget {
               ButtonWidget(
                 buttonIcon: FontAwesomeIcons.apple,
                 buttonText: 'Continue with Apple',
+              ),
+              Gaps.v20,
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    width: 300,
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: RichText(
+                            // overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              children: [
+                                const TextSpan(
+                                    text: 'By continuing, you agree to our '),
+                                TextSpan(
+                                  text: 'Terms of Service ',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => _goServiesOf(context),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: Sizes.size14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const TextSpan(
+                                    text:
+                                        'and acknowledge that you have read our '),
+                                const TextSpan(
+                                    text: 'Privacy Policy ',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: Sizes.size14,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                const TextSpan(
+                                    text:
+                                        'to learn how we collect, use, and share your data.'),
+                              ],
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: Sizes.size12,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
