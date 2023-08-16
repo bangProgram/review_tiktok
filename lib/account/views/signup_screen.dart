@@ -6,7 +6,8 @@ import 'package:review_tiktok/account/views/login_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
-import 'package:review_tiktok/tutorial/views/tutorial_sub_screen.dart';
+import 'package:review_tiktok/tutorial/views/privacy_policy_screen.dart';
+import 'package:review_tiktok/tutorial/views/terms_of_service_screen.dart';
 
 class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
@@ -31,7 +32,15 @@ class SignupScreen extends StatelessWidget {
   void _goServiesOf(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const TutorialSubScreen(),
+        builder: (context) => const TermsOfServiceScreen(),
+      ),
+    );
+  }
+
+  void _goPolicyOf(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const PrivacyPolicyScreen(),
       ),
     );
   }
@@ -110,9 +119,11 @@ class SignupScreen extends StatelessWidget {
                                 const TextSpan(
                                     text:
                                         'and acknowledge that you have read our '),
-                                const TextSpan(
+                                TextSpan(
                                     text: 'Privacy Policy ',
-                                    style: TextStyle(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => _goPolicyOf(context),
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: Sizes.size14,
                                       fontWeight: FontWeight.bold,

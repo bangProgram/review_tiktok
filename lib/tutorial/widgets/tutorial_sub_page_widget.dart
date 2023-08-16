@@ -2,32 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-enum Param { title, text, bold }
-
 class TutorialSubPageWidget extends StatelessWidget {
-  final List<Map<Param, String>> textList;
+  final String title;
+  final List<String> subscriptList;
 
-  TutorialSubPageWidget({
+  const TutorialSubPageWidget({
     super.key,
-    required this.textList,
+    required this.title,
+    required this.subscriptList,
   });
-
-  List<TextStyle> textStyle = [];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          for (var text in textList) ...{
+          Gaps.v16,
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: Sizes.size28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          for (var subscript in subscriptList) ...{
             Gaps.v16,
             Text(
-              text['title']!,
+              subscript,
               style: const TextStyle(
-                fontSize: Sizes.size28,
-                fontWeight: FontWeight.normal,
+                fontSize: Sizes.size14,
               ),
             ),
           }
