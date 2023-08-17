@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:review_tiktok/account/interests/widgets/interest_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/tutorial/views/tutorial_main_screen.dart';
 
 class InterestScreen extends StatefulWidget {
   const InterestScreen({super.key});
@@ -53,12 +55,26 @@ const interests = [
 class _InterestScreenState extends State<InterestScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _appbarInvisible = true;
+  final List<String> _selectList = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _scrollAndAppbarVisible();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onNextActive(String interest) {
+    setState(() {
+      _selectList.add(interest);
+      print(_selectList);
+    });
   }
 
   void _scrollAndAppbarVisible() {
@@ -70,6 +86,28 @@ class _InterestScreenState extends State<InterestScreen> {
       }
       setState(() {});
     });
+  }
+
+  void _goNextPage() {
+    if (_selectList.isNotEmpty) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const TutorialMainScreen(),
+        ),
+        (route) => false,
+      );
+    } else {
+      return;
+    }
+  }
+
+  void _onSkipPressed() {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const TutorialMainScreen(),
+      ),
+      (route) => false,
+    );
   }
 
   @override
@@ -117,25 +155,8 @@ class _InterestScreenState extends State<InterestScreen> {
                     spacing: Sizes.size12,
                     children: [
                       for (var interest in interests)
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.grey.shade300),
-                            boxShadow: [
-                              BoxShadow(
-                                  blurRadius: Sizes.size10,
-                                  color: Colors.black.withOpacity(0.2)),
-                            ],
-                            borderRadius: BorderRadius.circular(Sizes.size28),
-                          ),
-                          padding: const EdgeInsets.all(Sizes.size14),
-                          child: Text(
-                            interest,
-                            style: const TextStyle(
-                              fontSize: Sizes.size16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        InterestButtonWidget(
+                          interest: interest,
                         ),
                     ],
                   ),
@@ -146,51 +167,64 @@ class _InterestScreenState extends State<InterestScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        elevation: 1,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Sizes.size28),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size10,
-                  horizontal: Sizes.size48,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
+              GestureDetector(
+                onTap: _onSkipPressed,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size10,
+                    horizontal: Sizes.size56,
                   ),
-                  borderRadius: BorderRadius.circular(
-                    Sizes.size3,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      Sizes.size3,
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Skip',
-                  style: TextStyle(
-                    fontSize: Sizes.size20,
-                    fontWeight: FontWeight.bold,
+                  child: const Text(
+                    'Skip',
+                    style: TextStyle(
+                      fontSize: Sizes.size16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
               Gaps.h12,
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size10,
-                  horizontal: Sizes.size48,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    Sizes.size3,
-                  ),
-                ),
-                child: const Text(
-                  'Next',
-                  style: TextStyle(
-                    fontSize: Sizes.size20,
-                    fontWeight: FontWeight.bold,
+              GestureDetector(
+                onTap: _goNextPage,
+                child: Opacity(
+                  opacity: _selectList.isNotEmpty ? 1 : 0.4,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size10,
+                      horizontal: Sizes.size56,
+                    ),
+                    decoration: BoxDecoration(
+                      color: _selectList.isNotEmpty
+                          ? Colors.transparent
+                          : Colors.grey.shade400,
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                      borderRadius: BorderRadius.circular(
+                        Sizes.size3,
+                      ),
+                    ),
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        fontSize: Sizes.size16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),

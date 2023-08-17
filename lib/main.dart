@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:review_tiktok/account/interests/views/interest_screen.dart';
+import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
 
 void main() {
   runApp(const App());
@@ -19,7 +19,7 @@ class App extends StatelessWidget {
             foregroundColor: Colors.black,
           ),
           scaffoldBackgroundColor: Colors.white),
-      home: const InterestScreen(),
+      home: const MainNavScreen(),
     );
   }
 }
