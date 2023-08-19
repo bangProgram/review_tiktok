@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/navigation/videopost/views/video_post_screen.dart';
 import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
 
 class MainNavScreen extends StatefulWidget {
@@ -51,7 +52,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
           children: [
             Offstage(
               offstage: _currentPage != 0,
-              child: container[0],
+              child: const VideoPostScreen(),
             ),
             Offstage(
               offstage: _currentPage != 1,
