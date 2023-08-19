@@ -72,6 +72,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
           ],
         ),
       ),
+      //깃허브용 주석
       bottomNavigationBar: BottomAppBar(
         color: Colors.black,
         child: Container(
