@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
-import 'package:review_tiktok/navigation/videopost/views/video_post_screen.dart';
+import 'package:review_tiktok/navigation/discover/views/discover_screen.dart';
+import 'package:review_tiktok/navigation/inbox/views/inbox_screen.dart';
+import 'package:review_tiktok/navigation/videopost/views/video_timeline_screen.dart';
 import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
 
 class MainNavScreen extends StatefulWidget {
@@ -47,16 +49,17 @@ class _MainNavScreenState extends State<MainNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         child: Stack(
           children: [
             Offstage(
               offstage: _currentPage != 0,
-              child: const VideoPostScreen(),
+              child: const VideoTimelineScreen(),
             ),
             Offstage(
               offstage: _currentPage != 1,
-              child: container[1],
+              child: const DiscoverScreen(),
             ),
             Offstage(
               offstage: _currentPage != 2,
@@ -64,7 +67,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
             ),
             Offstage(
               offstage: _currentPage != 3,
-              child: container[3],
+              child: const InboxScreen(),
             ),
             Offstage(
               offstage: _currentPage != 4,
