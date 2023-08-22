@@ -12,6 +12,8 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen>
     with SingleTickerProviderStateMixin {
+  bool _showBarrier = false;
+
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(
@@ -26,6 +28,10 @@ class _ActivityScreenState extends State<ActivityScreen>
     begin: const Offset(0.0, -1.0),
     end: const Offset(0.0, 0.0),
   ).animate(_animationController);
+
+  late final Animation<Color?> _barrierAnimation =
+      ColorTween(begin: Colors.transparent, end: Colors.black54)
+          .animate(_animationController);
 
   final List<String> _tiles = List.generate(15, (index) => "$index m");
 
@@ -62,21 +68,27 @@ class _ActivityScreenState extends State<ActivityScreen>
     });
   }
 
-  void _onAnimated() {
+  void _onAnimated() async {
     if (_rotateAnimation.isCompleted) {
-      _animationController.reverse();
+      await _animationController.reverse();
     } else {
       _animationController.forward();
     }
+
+    setState(() {
+      _showBarrier = !_showBarrier;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: GestureDetector(
           onTap: _onAnimated,
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
@@ -192,6 +204,7 @@ class _ActivityScreenState extends State<ActivityScreen>
                 )
             ],
           ),
+          if (_showBarrier) AnimatedModalBarrier(color: _barrierAnimation),
           SlideTransition(
             position: _slideAnimation,
             child: Container(
