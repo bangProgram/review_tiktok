@@ -7,12 +7,14 @@ class MainNavButtonWidget extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool selected;
+  final bool inverted;
 
   const MainNavButtonWidget({
     super.key,
     required this.icon,
     required this.label,
     required this.selected,
+    required this.inverted,
   });
 
   @override
@@ -27,14 +29,14 @@ class MainNavButtonWidget extends StatelessWidget {
           children: [
             FaIcon(
               icon,
-              color: Colors.white,
+              color: inverted ? Colors.white : Colors.black,
               size: selected ? Sizes.size24 + Sizes.size1 : Sizes.size18,
             ),
             Gaps.v5,
             Text(
               label,
               style: TextStyle(
-                color: Colors.white,
+                color: inverted ? Colors.white : Colors.black,
                 fontSize: selected ? Sizes.size14 : Sizes.size12,
               ),
             )

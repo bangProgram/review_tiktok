@@ -4,6 +4,7 @@ import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/discover/views/discover_screen.dart';
 import 'package:review_tiktok/navigation/inbox/views/inbox_screen.dart';
+import 'package:review_tiktok/navigation/profile/views/user_profile_screen.dart';
 import 'package:review_tiktok/navigation/videopost/views/video_timeline_screen.dart';
 import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
 
@@ -15,7 +16,7 @@ class MainNavScreen extends StatefulWidget {
 }
 
 class _MainNavScreenState extends State<MainNavScreen> {
-  int _currentPage = 0;
+  int _currentPage = 4;
 
   void _pageSelect(int index) {
     setState(() {
@@ -71,14 +72,14 @@ class _MainNavScreenState extends State<MainNavScreen> {
             ),
             Offstage(
               offstage: _currentPage != 4,
-              child: container[4],
+              child: const UserProfileScreen(),
             ),
           ],
         ),
       ),
       //깃허브용 주석
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        color: _currentPage == 0 ? Colors.black : Colors.white,
         child: Container(
           padding: const EdgeInsets.all(
             Sizes.size10,
@@ -96,6 +97,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.house,
                         label: 'Home',
                         selected: _currentPage == 0,
+                        inverted: _currentPage == 0,
                       ),
                     ),
                   ),
@@ -103,9 +105,11 @@ class _MainNavScreenState extends State<MainNavScreen> {
                     child: GestureDetector(
                       onTap: () => _pageSelect(1),
                       child: MainNavButtonWidget(
-                          icon: FontAwesomeIcons.magnifyingGlass,
-                          label: 'Discover',
-                          selected: _currentPage == 1),
+                        icon: FontAwesomeIcons.magnifyingGlass,
+                        label: 'Discover',
+                        selected: _currentPage == 1,
+                        inverted: _currentPage == 0,
+                      ),
                     ),
                   ),
                   Expanded(
@@ -144,13 +148,18 @@ class _MainNavScreenState extends State<MainNavScreen> {
                               height: 30,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: _currentPage == 0
+                                    ? Colors.white
+                                    : Colors.black,
                                 borderRadius:
                                     BorderRadius.circular(Sizes.size9),
                               ),
-                              child: const Center(
+                              child: Center(
                                 child: FaIcon(
                                   FontAwesomeIcons.plus,
+                                  color: _currentPage == 0
+                                      ? Colors.black
+                                      : Colors.white,
                                   size: Sizes.size18,
                                 ),
                               ),
@@ -167,6 +176,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.message,
                         label: 'Inbox',
                         selected: _currentPage == 3,
+                        inverted: _currentPage == 0,
                       ),
                     ),
                   ),
@@ -177,21 +187,10 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.user,
                         label: 'Profile',
                         selected: _currentPage == 4,
+                        inverted: _currentPage == 0,
                       ),
                     ),
                   ),
-                  // FaIcon(
-                  //   FontAwesomeIcons.magnifyingGlass,
-                  //   color: Colors.white,
-                  // ),
-                  // FaIcon(
-                  //   FontAwesomeIcons.message,
-                  //   color: Colors.white,
-                  // ),
-                  // FaIcon(
-                  //   FontAwesomeIcons.user,
-                  //   color: Colors.white,
-                  // ),
                 ],
               ),
             ],
