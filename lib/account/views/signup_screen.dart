@@ -110,8 +110,8 @@ class SignupScreen extends StatelessWidget {
                                   text: 'Terms of Service ',
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () => _goServiesOf(context),
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: Sizes.size14,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -120,14 +120,15 @@ class SignupScreen extends StatelessWidget {
                                     text:
                                         'and acknowledge that you have read our '),
                                 TextSpan(
-                                    text: 'Privacy Policy ',
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () => _goPolicyOf(context),
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Sizes.size14,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                  text: 'Privacy Policy ',
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () => _goPolicyOf(context),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Sizes.size14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                                 const TextSpan(
                                     text:
                                         'to learn how we collect, use, and share your data.'),
@@ -149,7 +150,6 @@ class SignupScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.shade200,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Sizes.size44),
           child: Row(

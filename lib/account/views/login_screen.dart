@@ -74,7 +74,7 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.grey.shade200,
+        // color: Colors.grey.shade200,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Sizes.size44),
           child: Row(

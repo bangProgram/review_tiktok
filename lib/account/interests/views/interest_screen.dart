@@ -72,7 +72,11 @@ class _InterestScreenState extends State<InterestScreen> {
 
   void _onNextActive(String interest) {
     setState(() {
-      _selectList.add(interest);
+      if (_selectList.contains(interest)) {
+        _selectList.remove(interest);
+      } else {
+        _selectList.add(interest);
+      }
       print(_selectList);
     });
   }
@@ -142,12 +146,14 @@ class _InterestScreenState extends State<InterestScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text('Get better video recommendations',
-                    style: TextStyle(
-                      color: Colors.black54,
-                      fontSize: Sizes.size20,
-                      fontWeight: FontWeight.w500,
-                    )),
+                const Text(
+                  'Get better video recommendations',
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: Sizes.size20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: Sizes.size32),
                   child: Wrap(
@@ -155,8 +161,12 @@ class _InterestScreenState extends State<InterestScreen> {
                     spacing: Sizes.size12,
                     children: [
                       for (var interest in interests)
-                        InterestButtonWidget(
-                          interest: interest,
+                        GestureDetector(
+                          onTap: () => _onNextActive(interest),
+                          child: InterestButtonWidget(
+                            interest: interest,
+                            selected: _selectList.contains(interest),
+                          ),
                         ),
                     ],
                   ),

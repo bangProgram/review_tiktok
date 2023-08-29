@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/account/interests/views/interest_screen.dart';
 import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
-import 'package:review_tiktok/tutorial/views/tutorial_main_screen.dart';
+import 'package:review_tiktok/utils.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -41,7 +42,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   void _goNextPage() {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const TutorialMainScreen(),
+        builder: (context) => const InterestScreen(),
       ),
       (route) => false,
     );
@@ -94,8 +95,8 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                 Gaps.v32,
                 TextField(
                   enabled: false,
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : Colors.black,
                   ),
                   controller: _textController,
                   decoration: InputDecoration(
