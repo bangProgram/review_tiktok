@@ -1,0 +1,11 @@
+{
+  "commentCount": "{commentCnt}",
+  "@commentCount": {
+    "placeholders" : {
+      "commentCnt" : {
+        "type" : "int",
+        "format" : "compact"
+      }
+    }
+  }
+}

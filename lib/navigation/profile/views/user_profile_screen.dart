@@ -4,6 +4,7 @@ import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/profile/views/user_setting_screen.dart';
 import 'package:review_tiktok/navigation/profile/widgets/sliver_haeder_tabbar.dart';
+import 'package:review_tiktok/utils.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -41,9 +42,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 actions: [
                   IconButton(
                     onPressed: _goSetting,
-                    icon: const FaIcon(
+                    icon: FaIcon(
                       FontAwesomeIcons.gear,
-                      color: Colors.black,
+                      color: isDarkMode(context) ? null : Colors.black,
                       size: Sizes.size18,
                     ),
                   ),
@@ -52,6 +53,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
+                    Gaps.v14,
                     Container(
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,

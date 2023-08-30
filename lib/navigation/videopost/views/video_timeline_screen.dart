@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_timeline_page.dart';
 
 class VideoTimelineScreen extends StatefulWidget {
-  const VideoTimelineScreen({super.key});
+  final bool navSelected;
+
+  const VideoTimelineScreen({super.key, required this.navSelected});
 
   @override
   State<VideoTimelineScreen> createState() => _VideoTimelineScreenState();
@@ -30,6 +32,7 @@ class _VideoTimelineScreenState extends State<VideoTimelineScreen> {
       itemCount: 10,
       itemBuilder: (context, index) {
         return VideoTimelinePage(
+          navSelected: widget.navSelected,
           pageIndex: index,
         );
       },

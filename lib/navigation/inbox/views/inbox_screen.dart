@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/inbox/activity/views/activity_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chats_screen.dart';
+import 'package:review_tiktok/utils.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
@@ -57,10 +58,10 @@ class InboxScreen extends StatelessWidget {
             ),
             trailing: GestureDetector(
               onTap: () => _goActivity(context),
-              child: const FaIcon(
+              child: FaIcon(
                 FontAwesomeIcons.chevronRight,
                 size: Sizes.size14,
-                color: Colors.black,
+                color: isDarkMode(context) ? null : Colors.black,
               ),
             ),
           ),

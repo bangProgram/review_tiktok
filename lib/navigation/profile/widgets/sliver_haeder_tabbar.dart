@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/utils.dart';
 
 class SliverHeaderTabbar extends SliverPersistentHeaderDelegate {
   @override
@@ -19,8 +20,8 @@ class SliverHeaderTabbar extends SliverPersistentHeaderDelegate {
       child: TabBar(
         indicatorSize: TabBarIndicatorSize.label,
         indicatorColor: Colors.black,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.grey.shade500,
+        labelColor: isDarkMode(context) ? null : Colors.black,
+        unselectedLabelColor: Colors.grey.shade600,
         labelPadding: const EdgeInsets.symmetric(
           vertical: Sizes.size10,
         ),

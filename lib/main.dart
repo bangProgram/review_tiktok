@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:review_tiktok/account/views/signup_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:review_tiktok/generated/l10n.dart';
+import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +19,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    S.load(const Locale('ko'));
     return MaterialApp(
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         brightness: Brightness.light,
         textTheme: Typography.blackMountainView,
@@ -36,8 +45,8 @@ class App extends StatelessWidget {
         brightness: Brightness.dark,
         textTheme: Typography.whiteMountainView,
         primaryColor: const Color.fromARGB(255, 255, 68, 55),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade800,
           elevation: 0,
           foregroundColor: Colors.white,
         ),
@@ -46,7 +55,7 @@ class App extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const SignupScreen(),
+      home: const MainNavScreen(),
     );
   }
 }

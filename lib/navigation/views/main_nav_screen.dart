@@ -6,7 +6,9 @@ import 'package:review_tiktok/navigation/discover/views/discover_screen.dart';
 import 'package:review_tiktok/navigation/inbox/views/inbox_screen.dart';
 import 'package:review_tiktok/navigation/profile/views/user_profile_screen.dart';
 import 'package:review_tiktok/navigation/videopost/views/video_timeline_screen.dart';
+import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
 import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
+import 'package:review_tiktok/utils.dart';
 
 class MainNavScreen extends StatefulWidget {
   const MainNavScreen({super.key});
@@ -24,31 +26,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
     });
   }
 
-  List container = [
-    Container(
-      child: Transform.translate(
-          offset: const Offset(0, 10), child: const Center(child: Text('화면1'))),
-    ),
-    Container(
-      child: Transform.translate(
-          offset: const Offset(0, 30), child: const Center(child: Text('화면2'))),
-    ),
-    Container(
-      child: Transform.translate(
-          offset: const Offset(0, 50), child: const Center(child: Text('화면3'))),
-    ),
-    Container(
-      child: Transform.translate(
-          offset: const Offset(0, 70), child: const Center(child: Text('화면4'))),
-    ),
-    Container(
-      child: Transform.translate(
-          offset: const Offset(0, 90), child: const Center(child: Text('화면5'))),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    print('JB NAV _currentPage == 0 : $_currentPage // ${_currentPage == 0}');
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -56,7 +36,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
           children: [
             Offstage(
               offstage: _currentPage != 0,
-              child: const VideoTimelineScreen(),
+              child: VideoTimelineScreen(
+                navSelected: _currentPage == 0,
+              ),
             ),
             Offstage(
               offstage: _currentPage != 1,
@@ -64,7 +46,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
             ),
             Offstage(
               offstage: _currentPage != 2,
-              child: container[2],
+              child: Container(),
             ),
             Offstage(
               offstage: _currentPage != 3,
@@ -79,7 +61,9 @@ class _MainNavScreenState extends State<MainNavScreen> {
       ),
       //깃허브용 주석
       bottomNavigationBar: BottomAppBar(
-        color: _currentPage == 0 ? Colors.black : Colors.white,
+        color: _currentPage == 0 || isDarkMode(context)
+            ? Colors.black
+            : Colors.white,
         child: Container(
           padding: const EdgeInsets.all(
             Sizes.size10,
@@ -97,7 +81,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.house,
                         label: 'Home',
                         selected: _currentPage == 0,
-                        inverted: _currentPage == 0,
+                        inverted: _currentPage == 0 || isDarkMode(context),
                       ),
                     ),
                   ),
@@ -108,13 +92,20 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.magnifyingGlass,
                         label: 'Discover',
                         selected: _currentPage == 1,
-                        inverted: _currentPage == 0,
+                        inverted: _currentPage == 0 || isDarkMode(context),
                       ),
                     ),
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () => _pageSelect(2),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const VideoRecordScreen(),
+                          ),
+                        );
+                      },
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [
@@ -148,7 +139,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                               height: 30,
                               width: 40,
                               decoration: BoxDecoration(
-                                color: _currentPage == 0
+                                color: _currentPage == 0 || isDarkMode(context)
                                     ? Colors.white
                                     : Colors.black,
                                 borderRadius:
@@ -157,9 +148,10 @@ class _MainNavScreenState extends State<MainNavScreen> {
                               child: Center(
                                 child: FaIcon(
                                   FontAwesomeIcons.plus,
-                                  color: _currentPage == 0
-                                      ? Colors.black
-                                      : Colors.white,
+                                  color:
+                                      _currentPage == 0 || isDarkMode(context)
+                                          ? Colors.black
+                                          : Colors.white,
                                   size: Sizes.size18,
                                 ),
                               ),
@@ -176,7 +168,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.message,
                         label: 'Inbox',
                         selected: _currentPage == 3,
-                        inverted: _currentPage == 0,
+                        inverted: _currentPage == 0 || isDarkMode(context),
                       ),
                     ),
                   ),
@@ -187,7 +179,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                         icon: FontAwesomeIcons.user,
                         label: 'Profile',
                         selected: _currentPage == 4,
-                        inverted: _currentPage == 0,
+                        inverted: _currentPage == 0 || isDarkMode(context),
                       ),
                     ),
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/utils.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -50,9 +51,10 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           title: Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-              Sizes.size8,
-            )),
+              borderRadius: BorderRadius.circular(
+                Sizes.size8,
+              ),
+            ),
             height: Sizes.size40,
             width: screenWidth * 0.7,
             child: TextField(
@@ -87,7 +89,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   onPressed: _clearText,
                 ),
                 hintText: 'food tiktok',
-                fillColor: Colors.grey.shade200,
+                fillColor: Colors.grey.shade600,
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: Sizes.size10,
@@ -101,8 +103,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ),
             indicatorColor: Colors.black,
             isScrollable: true,
-            unselectedLabelColor: Colors.grey.shade500,
-            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey.shade600,
+            labelColor: isDarkMode(context) ? Colors.white : Colors.black,
             labelStyle: const TextStyle(
               fontSize: Sizes.size16,
               fontWeight: FontWeight.bold,

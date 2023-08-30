@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/generated/l10n.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_comment_page.dart';
 import 'package:review_tiktok/navigation/videopost/widgets/video_timeline_button_widget.dart';
 import 'package:video_player/video_player.dart';
@@ -9,9 +10,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoTimelinePage extends StatefulWidget {
   final int pageIndex;
+  final bool navSelected;
+
   const VideoTimelinePage({
     super.key,
     required this.pageIndex,
+    required this.navSelected,
   });
 
   @override
@@ -79,7 +83,9 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
   }
 
   void _visibiltyDetect(VisibilityInfo info) {
-    if (info.visibleFraction == 1 && _isPlaying != false) {
+    if (info.visibleFraction == 1 &&
+        _isPlaying != false &&
+        widget.navSelected) {
       _videoPlayerController.play();
     }
     if (info.visibleFraction == 0 && _isPlaying == true) {
@@ -108,7 +114,6 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeigth = MediaQuery.of(context).size.height;
 
     return VisibilityDetector(
       key: Key('_detectKey_${widget.pageIndex}'),
@@ -165,9 +170,9 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
                   Gaps.v20,
                   GestureDetector(
                     onTap: () => _onCommentPress(context),
-                    child: const VideoTimelintButtonWidget(
+                    child: VideoTimelintButtonWidget(
                       icon: FontAwesomeIcons.solidComment,
-                      text: '33.0K',
+                      text: S.of(context).commentCount(331000),
                     ),
                   ),
                   Gaps.v20,

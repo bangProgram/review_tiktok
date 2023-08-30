@@ -12,10 +12,17 @@ class TutorialMainScreen extends StatefulWidget {
 class _TutorialMainScreenState extends State<TutorialMainScreen> {
   final PageController _pageController = PageController();
 
-  void _test(int page) {
-    print(page);
-    print(_pageController.position);
-    print(_pageController.positions);
+  int _curPage = 0;
+
+  void _pageCheck(int page) {
+    _curPage = page;
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -27,20 +34,22 @@ class _TutorialMainScreenState extends State<TutorialMainScreen> {
               vertical: Sizes.size36, horizontal: Sizes.size32),
           child: PageView(
             controller: _pageController,
-            onPageChanged: _test,
+            onPageChanged: _pageCheck,
             scrollDirection: Axis.vertical,
-            children: const [
+            children: [
               TutorialPageWidget(
                 title: 'Swipe up',
                 subscript:
                     'Videos are personalized for you based on what you watch, like, and share.',
                 image: "assets/images/tutorial1.JPG",
+                page: _curPage,
               ),
               TutorialPageWidget(
                 title: 'Swipe up',
                 subscript:
                     'Videos are personalized for you based on what you watch, like, and share.',
                 image: "assets/images/tutorial2.JPG",
+                page: _curPage,
               ),
             ],
           ),

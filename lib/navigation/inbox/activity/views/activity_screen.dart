@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/utils.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -30,7 +31,7 @@ class _ActivityScreenState extends State<ActivityScreen>
   ).animate(_animationController);
 
   late final Animation<Color?> _barrierAnimation =
-      ColorTween(begin: Colors.transparent, end: Colors.black54)
+      ColorTween(begin: Colors.transparent, end: Colors.black.withOpacity(0.7))
           .animate(_animationController);
 
   final List<String> _tiles = List.generate(15, (index) => "$index m");
@@ -81,6 +82,13 @@ class _ActivityScreenState extends State<ActivityScreen>
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    print('jb : 설마 팝이냐?');
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -101,10 +109,10 @@ class _ActivityScreenState extends State<ActivityScreen>
               Gaps.h8,
               RotationTransition(
                 turns: _rotateAnimation,
-                child: const FaIcon(
+                child: FaIcon(
                   FontAwesomeIcons.chevronDown,
                   size: Sizes.size14,
-                  color: Colors.black,
+                  color: isDarkMode(context) ? null : Colors.black,
                 ),
               )
             ],
@@ -172,24 +180,26 @@ class _ActivityScreenState extends State<ActivityScreen>
                     title: RichText(
                       text: TextSpan(
                         children: [
-                          const TextSpan(
+                          TextSpan(
                             text: 'TikTok : ',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: isDarkMode(context) ? null : Colors.black,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const TextSpan(
+                          TextSpan(
                             text:
                                 "You've registered to attend lnsects with MJ! ",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: isDarkMode(context) ? null : Colors.black,
                             ),
                           ),
                           TextSpan(
                             text: ' $tile',
                             style: TextStyle(
-                              color: Colors.grey.shade400,
+                              color: isDarkMode(context)
+                                  ? Colors.grey.shade700
+                                  : Colors.grey.shade400,
                             ),
                           ),
                         ],
@@ -204,20 +214,26 @@ class _ActivityScreenState extends State<ActivityScreen>
                 )
             ],
           ),
-          if (_showBarrier) AnimatedModalBarrier(color: _barrierAnimation),
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAnimation,
+              dismissible: false,
+            ),
           SlideTransition(
             position: _slideAnimation,
             child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(
-                      Sizes.size10,
-                    ),
-                    bottomRight: Radius.circular(
-                      Sizes.size10,
-                    ),
-                  )),
+              decoration: BoxDecoration(
+                color:
+                    isDarkMode(context) ? Colors.grey.shade800 : Colors.white,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(
+                    Sizes.size10,
+                  ),
+                  bottomRight: Radius.circular(
+                    Sizes.size10,
+                  ),
+                ),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -227,7 +243,7 @@ class _ActivityScreenState extends State<ActivityScreen>
                         children: [
                           FaIcon(
                             tab['icon'],
-                            color: Colors.black,
+                            color: isDarkMode(context) ? null : Colors.black,
                             size: Sizes.size14,
                           ),
                           Gaps.h14,
