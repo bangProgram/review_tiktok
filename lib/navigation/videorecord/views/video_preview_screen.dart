@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPreviewScreen extends StatefulWidget {
   final XFile file;
+  final bool isPicked;
 
-  const VideoPreviewScreen({super.key, required this.file});
+  const VideoPreviewScreen(
+      {super.key, required this.file, required this.isPicked});
 
   @override
   State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
@@ -21,6 +24,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
   );
 
   bool _playerInit = false;
+  bool? _recordSaved = false;
 
   @override
   void initState() {
@@ -36,7 +40,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     setState(() {});
   }
 
-  void _onGallerySave() {}
+  Future<void> _onGallerySave() async {
+    _recordSaved = await GallerySaver.saveVideo(widget.file.path,
+        albumName: 'TikTok Clone');
+  }
 
   @override
   void dispose() {
@@ -53,10 +60,15 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         centerTitle: true,
         title: const Text('Preview Video!'),
         actions: [
-          IconButton(
-            onPressed: _onGallerySave,
-            icon: const FaIcon(FontAwesomeIcons.download),
-          ),
+          if (!widget.isPicked)
+            IconButton(
+              onPressed: _onGallerySave,
+              icon: FaIcon(
+                _recordSaved!
+                    ? FontAwesomeIcons.check
+                    : FontAwesomeIcons.download,
+              ),
+            ),
         ],
       ),
       body: _playerInit

@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
@@ -14,8 +15,8 @@ class VideoRecordScreen extends StatefulWidget {
 }
 
 class _VideoRecordScreenState extends State<VideoRecordScreen>
-    with TickerProviderStateMixin {
-  late final CameraController _cameraController;
+    with TickerProviderStateMixin, WidgetsBindingObserver {
+  late CameraController _cameraController;
   late final AnimationController _scaleAnimationController =
       AnimationController(
     vsync: this,
@@ -46,18 +47,21 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initPermission();
 
     _progressAnimationController.addListener(() {
       setState(() {});
     });
 
-    _progressAnimationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        print('Progress Aimation End!');
-        onRecordStartandStop();
-      }
-    });
+    _progressAnimationController.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          print('Progress Aimation End!');
+          onRecordStartandStop();
+        }
+      },
+    );
   }
 
   Future<void> _initPermission() async {
@@ -86,6 +90,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
       camera[_isSelfie ? 1 : 0],
       ResolutionPreset.ultraHigh,
     );
+
     await _cameraController.initialize();
     _camInit = _cameraController.value.isInitialized;
     _flashMode = _cameraController.value.flashMode;
@@ -121,10 +126,41 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
         MaterialPageRoute(
           builder: (context) => VideoPreviewScreen(
             file: file,
+            isPicked: false,
           ),
         ),
       );
     }
+  }
+
+  Future<void> _onVideoPicker() async {
+    final file = await ImagePicker().pickVideo(source: ImageSource.gallery);
+    if (file == null) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPreviewScreen(
+          file: file,
+          isPicked: true,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.inactive) {
+      if (!_camInit) return;
+      _camInit = false;
+      _cameraController.dispose();
+      print('Video Record Screen Camera Dispose !! ');
+    } else if (state == AppLifecycleState.resumed) {
+      print('Video Record Screen Camera Initialize !! ');
+      await _initCamera();
+    }
+    setState(() {
+      print('Video Record Screen setState');
+    });
   }
 
   @override
@@ -138,7 +174,6 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
 
   @override
   Widget build(BuildContext context) {
-    print('JB build 하니안하니?');
     final screenW = MediaQuery.of(context).size.width;
     final screenH = MediaQuery.of(context).size.height;
 
@@ -153,9 +188,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
             ),
             Positioned.fill(
               child: Container(
-                child: _hasPermission || _camInit
-                    ? CameraPreview(_cameraController)
-                    : const Center(
+                child: !_hasPermission || !_camInit
+                    ? const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -169,7 +203,8 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
                             CircularProgressIndicator(),
                           ],
                         ),
-                      ),
+                      )
+                    : CameraPreview(_cameraController),
               ),
             ),
             Positioned(
@@ -281,7 +316,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
                     child: Container(
                       alignment: Alignment.center,
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: _onVideoPicker,
                         icon: const FaIcon(
                           FontAwesomeIcons.image,
                           color: Colors.white,

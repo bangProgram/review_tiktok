@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:review_tiktok/generated/l10n.dart';
-import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
+import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +55,7 @@ class App extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const MainNavScreen(),
+      home: const VideoRecordScreen(),
     );
   }
 }
