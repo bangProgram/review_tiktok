@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/discover/views/discover_screen.dart';
@@ -11,18 +12,31 @@ import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
 import 'package:review_tiktok/utils.dart';
 
 class MainNavScreen extends StatefulWidget {
-  const MainNavScreen({super.key});
+  static const routeName = "home";
+  static const routeURL = "/inbox";
+
+  final String tab;
+  const MainNavScreen({super.key, required this.tab});
 
   @override
   State<MainNavScreen> createState() => _MainNavScreenState();
 }
 
 class _MainNavScreenState extends State<MainNavScreen> {
-  int _currentPage = 4;
+  List<String> tabs = [
+    'home',
+    'discover',
+    'xxxx',
+    'inbox',
+    'profile',
+  ];
+
+  late int _currentPage = tabs.indexOf(widget.tab);
 
   void _pageSelect(int index) {
     setState(() {
       _currentPage = index;
+      context.go('/${tabs[index]}');
     });
   }
 

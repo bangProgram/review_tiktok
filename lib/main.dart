@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:review_tiktok/generated/l10n.dart';
-import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
+import 'package:review_tiktok/route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +20,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     S.load(const Locale('ko'));
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       localizationsDelegates: const [
         S.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -55,7 +56,6 @@ class App extends StatelessWidget {
         ),
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const VideoRecordScreen(),
     );
   }
 }

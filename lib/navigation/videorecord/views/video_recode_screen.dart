@@ -57,7 +57,6 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
     _progressAnimationController.addStatusListener(
       (status) {
         if (status == AnimationStatus.completed) {
-          print('Progress Aimation End!');
           onRecordStartandStop();
         }
       },
@@ -82,15 +81,12 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
 
   Future<void> _initCamera() async {
     if (!_hasPermission) return;
-
     final camera = await availableCameras();
     if (camera.isEmpty) return;
-
     _cameraController = CameraController(
       camera[_isSelfie ? 1 : 0],
       ResolutionPreset.ultraHigh,
     );
-
     await _cameraController.initialize();
     _camInit = _cameraController.value.isInitialized;
     _flashMode = _cameraController.value.flashMode;
@@ -136,6 +132,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
   Future<void> _onVideoPicker() async {
     final file = await ImagePicker().pickVideo(source: ImageSource.gallery);
     if (file == null) return;
+    if (!mounted) return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -153,14 +150,10 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
       if (!_camInit) return;
       _camInit = false;
       _cameraController.dispose();
-      print('Video Record Screen Camera Dispose !! ');
     } else if (state == AppLifecycleState.resumed) {
-      print('Video Record Screen Camera Initialize !! ');
       await _initCamera();
     }
-    setState(() {
-      print('Video Record Screen setState');
-    });
+    setState(() {});
   }
 
   @override

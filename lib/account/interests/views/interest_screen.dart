@@ -5,6 +5,8 @@ import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/tutorial/views/tutorial_main_screen.dart';
 
 class InterestScreen extends StatefulWidget {
+  static const routeName = "interest";
+  static const routeURL = "/interest";
   const InterestScreen({super.key});
 
   @override
@@ -94,11 +96,10 @@ class _InterestScreenState extends State<InterestScreen> {
 
   void _goNextPage() {
     if (_selectList.isNotEmpty) {
-      Navigator.of(context).pushAndRemoveUntil(
+      Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const TutorialMainScreen(),
         ),
-        (route) => false,
       );
     } else {
       return;

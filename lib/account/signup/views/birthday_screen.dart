@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/interests/views/interest_screen.dart';
 import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
@@ -40,12 +41,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _goNextPage() {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const InterestScreen(),
-      ),
-      (route) => false,
-    );
+    context.goNamed(InterestScreen.routeName);
   }
 
   void _changeDate(DateTime date) {

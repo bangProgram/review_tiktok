@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:review_tiktok/account/interests/views/interest_screen.dart';
 import 'package:review_tiktok/account/login/widgets/login_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
-import 'package:review_tiktok/tutorial/views/tutorial_main_screen.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
@@ -20,12 +21,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   void _onLoginPress() {
     if (_globalKey.currentState!.validate()) {
       _globalKey.currentState!.save();
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const TutorialMainScreen(),
-        ),
-        (route) => false,
-      );
+      context.goNamed(InterestScreen.routeName);
     }
     return;
   }

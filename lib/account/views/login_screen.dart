@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/login/views/login_form_screen.dart';
 import 'package:review_tiktok/account/views/signup_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
@@ -7,15 +8,13 @@ import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const routeName = "login";
+  static const routeURL = "/login";
+
   const LoginScreen({super.key});
 
   void _goSignupScreen(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const SignupScreen(),
-      ),
-      (route) => false,
-    );
+    context.goNamed(SignupScreen.routeName);
   }
 
   void _goLoginForm(BuildContext context) {

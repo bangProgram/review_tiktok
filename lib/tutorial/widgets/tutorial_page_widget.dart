@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
@@ -16,12 +17,7 @@ class TutorialPageWidget extends StatelessWidget {
   });
 
   void _goMainNavigation(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const MainNavScreen(),
-      ),
-      (route) => false,
-    );
+    context.go(MainNavScreen.routeURL);
   }
 
   @override

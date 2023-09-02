@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/signup/views/username_screen.dart';
 import 'package:review_tiktok/account/views/login_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
@@ -10,15 +11,13 @@ import 'package:review_tiktok/tutorial/views/privacy_policy_screen.dart';
 import 'package:review_tiktok/tutorial/views/terms_of_service_screen.dart';
 
 class SignupScreen extends StatelessWidget {
+  static const routeName = "signup";
+  static const routeURL = "/";
+
   const SignupScreen({super.key});
 
   void _goLoginScreen(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-      (route) => false,
-    );
+    context.goNamed(LoginScreen.routeName);
   }
 
   void _goSignupByEmail(BuildContext context) {

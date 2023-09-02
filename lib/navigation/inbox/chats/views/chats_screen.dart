@@ -5,6 +5,8 @@ import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
+  static const routeName = "chat";
+  static const routeURL = "/chat";
   const ChatsScreen({super.key});
 
   @override
