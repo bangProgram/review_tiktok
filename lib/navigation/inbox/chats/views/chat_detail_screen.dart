@@ -4,7 +4,15 @@ import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
+  static const routeName = "chatDetail";
+  static const routeURL = "";
+
+  final String userId;
+
+  const ChatDetailScreen({
+    super.key,
+    required this.userId,
+  });
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -70,9 +78,9 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               )
             ],
           ),
-          title: const Text(
-            'JB_Crid',
-            style: TextStyle(
+          title: Text(
+            widget.userId,
+            style: const TextStyle(
               fontSize: Sizes.size14,
               fontWeight: FontWeight.w600,
             ),

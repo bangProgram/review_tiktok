@@ -3,6 +3,7 @@ import 'package:review_tiktok/account/interests/views/interest_screen.dart';
 import 'package:review_tiktok/account/views/login_screen.dart';
 import 'package:review_tiktok/account/views/signup_screen.dart';
 import 'package:review_tiktok/navigation/inbox/activity/views/activity_screen.dart';
+import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chats_screen.dart';
 import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
 
@@ -37,9 +38,17 @@ final router = GoRouter(
       builder: (context, state) => const ActivityScreen(),
     ),
     GoRoute(
-      path: ChatsScreen.routeURL,
-      name: ChatsScreen.routeName,
-      builder: (context, state) => const ChatsScreen(),
-    ),
+        path: ChatsScreen.routeURL,
+        name: ChatsScreen.routeName,
+        builder: (context, state) => const ChatsScreen(),
+        routes: [
+          GoRoute(
+              path: ":userId",
+              name: ChatDetailScreen.routeName,
+              builder: (context, state) {
+                final userId = state.pathParameters['userId']!;
+                return ChatDetailScreen(userId: userId);
+              })
+        ]),
   ],
 );

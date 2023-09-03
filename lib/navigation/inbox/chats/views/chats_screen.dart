@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
@@ -39,11 +40,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
     _dmList.removeAt(index);
   }
 
-  void _goChatDetail() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChatDetailScreen(),
-      ),
+  void _goChatDetail(int index) {
+    context.pushNamed(
+      ChatDetailScreen.routeName,
+      pathParameters: {"userId": "junbang_$index"},
     );
   }
 
@@ -114,7 +114,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
             children: [
               GestureDetector(
                 onLongPress: () => _delDirectMessage(index),
-                onTap: _goChatDetail,
+                onTap: () => _goChatDetail(index),
                 child: FadeTransition(
                   opacity: animation,
                   child: ScaleTransition(
