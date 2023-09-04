@@ -8,6 +8,9 @@ import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/videorecord/views/video_preview_screen.dart';
 
 class VideoRecordScreen extends StatefulWidget {
+  static const String routeName = "videopost";
+  static const String routeURL = "/videopost";
+
   const VideoRecordScreen({super.key});
 
   @override
@@ -86,6 +89,7 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
     _cameraController = CameraController(
       camera[_isSelfie ? 1 : 0],
       ResolutionPreset.ultraHigh,
+      enableAudio: false,
     );
     await _cameraController.initialize();
     _camInit = _cameraController.value.isInitialized;

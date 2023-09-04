@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/interests/views/interest_screen.dart';
 import 'package:review_tiktok/account/views/login_screen.dart';
@@ -5,9 +6,11 @@ import 'package:review_tiktok/account/views/signup_screen.dart';
 import 'package:review_tiktok/navigation/inbox/activity/views/activity_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chats_screen.dart';
+import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
 import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
 
 final router = GoRouter(
+  initialLocation: "/inbox",
   routes: [
     GoRoute(
       name: SignupScreen.routeName,
@@ -38,17 +41,39 @@ final router = GoRouter(
       builder: (context, state) => const ActivityScreen(),
     ),
     GoRoute(
-        path: ChatsScreen.routeURL,
-        name: ChatsScreen.routeName,
-        builder: (context, state) => const ChatsScreen(),
-        routes: [
-          GoRoute(
-              path: ":userId",
-              name: ChatDetailScreen.routeName,
-              builder: (context, state) {
-                final userId = state.pathParameters['userId']!;
-                return ChatDetailScreen(userId: userId);
-              })
-        ]),
+      path: ChatsScreen.routeURL,
+      name: ChatsScreen.routeName,
+      builder: (context, state) => const ChatsScreen(),
+      routes: [
+        GoRoute(
+          path: ":userId",
+          name: ChatDetailScreen.routeName,
+          builder: (context, state) {
+            final userId = state.pathParameters['userId']!;
+            return ChatDetailScreen(userId: userId);
+          },
+        ),
+      ],
+    ),
+    GoRoute(
+      path: VideoRecordScreen.routeURL,
+      name: VideoRecordScreen.routeName,
+      pageBuilder: (context, state) {
+        return CustomTransitionPage(
+          transitionDuration: const Duration(seconds: 1),
+          child: const VideoRecordScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            final slideAnimation = Tween(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(animation);
+            return SlideTransition(
+              position: slideAnimation,
+              child: child,
+            );
+          },
+        );
+      },
+    )
   ],
 );

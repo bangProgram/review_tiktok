@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:review_tiktok/common/config/change_noti_config.dart';
 
 class UserSettingScreen extends StatefulWidget {
   const UserSettingScreen({super.key});
@@ -40,6 +41,32 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
             ),
             title: const Text('about review_tiktok'),
           ),
+          AnimatedBuilder(
+            animation: changeNotiConfig,
+            builder: (context, child) {
+              return SwitchListTile.adaptive(
+                value: changeNotiConfig.autoMute,
+                onChanged: (value) {
+                  changeNotiConfig.onToggleMute();
+                },
+                title: const Text('default Mute'),
+                subtitle: const Text('앱의 음소거 기본옵션 설정'),
+              );
+            },
+          ),
+          AnimatedBuilder(
+              animation: changeNotiConfig,
+              builder: (context, child) {
+                return SwitchListTile(
+                  value: changeNotiConfig.isDarkMode,
+                  onChanged: (value) {
+                    changeNotiConfig.onToggleDarkMode();
+                    MediaQuery.of(context).platformBrightness;
+                  },
+                  title: const Text('DarkMode'),
+                  subtitle: const Text('앱의 다크모드 설정'),
+                );
+              }),
           SwitchListTile.adaptive(
             title: const Text('SwitchTile'),
             value: _isSelected,

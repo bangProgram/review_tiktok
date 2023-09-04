@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/common/config/change_noti_config.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/generated/l10n.dart';
@@ -31,20 +32,17 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
 
   bool _isPlaying = true;
   bool _isMore = false;
+  bool _autoMute = changeNotiConfig.autoMute;
 
   @override
   void initState() {
     super.initState();
     _initVideoController();
     _initAnimationController();
-  }
-
-  @override
-  void dispose() {
-    print('jb ${widget.pageIndex} Page : dispose! ');
-    _videoPlayerController.dispose();
-    _animationController.dispose();
-    super.dispose();
+    changeNotiConfig.addListener(() {
+      _autoMute = changeNotiConfig.autoMute;
+      setState(() {});
+    });
   }
 
   void _initAnimationController() {
@@ -112,6 +110,14 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
   }
 
   @override
+  void dispose() {
+    print('jb ${widget.pageIndex} Page : dispose! ');
+    _videoPlayerController.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -140,6 +146,19 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
                       color: Colors.white,
                     ),
                   ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 30,
+              left: 20,
+              child: IconButton(
+                onPressed: changeNotiConfig.onToggleMute,
+                icon: FaIcon(
+                  _autoMute
+                      ? FontAwesomeIcons.volumeOff
+                      : FontAwesomeIcons.volumeHigh,
+                  color: Colors.white,
                 ),
               ),
             ),

@@ -26,7 +26,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
   List<String> tabs = [
     'home',
     'discover',
-    'xxxx',
+    'videopost',
     'inbox',
     'profile',
   ];
@@ -38,6 +38,10 @@ class _MainNavScreenState extends State<MainNavScreen> {
       _currentPage = index;
       context.go('/${tabs[index]}');
     });
+  }
+
+  void _goVideoPost() {
+    context.pushNamed(VideoRecordScreen.routeName);
   }
 
   @override
@@ -112,14 +116,7 @@ class _MainNavScreenState extends State<MainNavScreen> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const VideoRecordScreen(),
-                          ),
-                        );
-                      },
+                      onTap: _goVideoPost,
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: [

@@ -41,8 +41,11 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
   }
 
   Future<void> _onGallerySave() async {
-    _recordSaved = await GallerySaver.saveVideo(widget.file.path,
-        albumName: 'TikTok Clone');
+    _recordSaved = await GallerySaver.saveVideo(
+      widget.file.path,
+      albumName: 'TikTok Clone',
+    );
+    setState(() {});
   }
 
   @override
@@ -67,6 +70,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
                 _recordSaved!
                     ? FontAwesomeIcons.check
                     : FontAwesomeIcons.download,
+                color: _recordSaved! ? Colors.green : Colors.black,
               ),
             ),
         ],
