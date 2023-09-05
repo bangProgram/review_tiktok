@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:review_tiktok/common/config/change_noti_config.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/generated/l10n.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_comment_page.dart';
+import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
 import 'package:review_tiktok/navigation/videopost/widgets/video_timeline_button_widget.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class VideoTimelinePage extends StatefulWidget {
+class VideoTimelinePage extends ConsumerStatefulWidget {
   final int pageIndex;
   final bool navSelected;
 
@@ -20,29 +21,24 @@ class VideoTimelinePage extends StatefulWidget {
   });
 
   @override
-  State<VideoTimelinePage> createState() => _VideoTimelinePageState();
+  VideoTimelinePageState createState() => VideoTimelinePageState();
 }
 
-class _VideoTimelinePageState extends State<VideoTimelinePage>
+class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
 
   final VideoPlayerController _videoPlayerController =
       VideoPlayerController.asset("assets/videos/pepe.mp4");
 
-  bool _isPlaying = true;
   bool _isMore = false;
-  bool _autoMute = changeNotiConfig.autoMute;
-
+  late bool _isMuted = ref.read(timelineConfigProvider).muted;
+  late bool _isPlaying = ref.read(timelineConfigProvider).autoPlay;
   @override
   void initState() {
     super.initState();
     _initVideoController();
     _initAnimationController();
-    changeNotiConfig.addListener(() {
-      _autoMute = changeNotiConfig.autoMute;
-      setState(() {});
-    });
   }
 
   void _initAnimationController() {
@@ -81,6 +77,14 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
   }
 
   void _visibiltyDetect(VisibilityInfo info) {
+    if (!mounted) return;
+
+    if (_isMuted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+
     if (info.visibleFraction == 1 &&
         _isPlaying != false &&
         widget.navSelected) {
@@ -106,6 +110,17 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
   void _moreText() {
     setState(() {
       _isMore = !_isMore;
+    });
+  }
+
+  void _onToggleMute() {
+    setState(() {
+      _isMuted = !_isMuted;
+      if (_isMuted) {
+        _videoPlayerController.setVolume(0);
+      } else {
+        _videoPlayerController.setVolume(1);
+      }
     });
   }
 
@@ -153,9 +168,9 @@ class _VideoTimelinePageState extends State<VideoTimelinePage>
               top: 30,
               left: 20,
               child: IconButton(
-                onPressed: changeNotiConfig.onToggleMute,
+                onPressed: _onToggleMute,
                 icon: FaIcon(
-                  _autoMute
+                  _isMuted
                       ? FontAwesomeIcons.volumeOff
                       : FontAwesomeIcons.volumeHigh,
                   color: Colors.white,

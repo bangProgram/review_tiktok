@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/generated/l10n.dart';
+import 'package:review_tiktok/navigation/videopost/repos/timeline_config_repos.dart';
+import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
 import 'package:review_tiktok/route.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +15,19 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  runApp(const App());
+  final preferences = await SharedPreferences.getInstance();
+  final repository = TimelineConfigRepos(preferences);
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        timelineConfigProvider.overrideWith(
+          () => TimelineConfigVM(repository),
+        ),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

@@ -1,27 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:review_tiktok/common/config/change_noti_config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
 
-class UserSettingScreen extends StatefulWidget {
+class UserSettingScreen extends ConsumerWidget {
   const UserSettingScreen({super.key});
 
   @override
-  State<UserSettingScreen> createState() => _UserSettingScreenState();
-}
-
-class _UserSettingScreenState extends State<UserSettingScreen> {
-  bool _isSelected = false;
-
-  void _onSelect(bool? select) {
-    if (select != null) {
-      setState(() {
-        _isSelected = select;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -41,42 +27,32 @@ class _UserSettingScreenState extends State<UserSettingScreen> {
             ),
             title: const Text('about review_tiktok'),
           ),
-          AnimatedBuilder(
-            animation: changeNotiConfig,
-            builder: (context, child) {
-              return SwitchListTile.adaptive(
-                value: changeNotiConfig.autoMute,
-                onChanged: (value) {
-                  changeNotiConfig.onToggleMute();
-                },
-                title: const Text('default Mute'),
-                subtitle: const Text('앱의 음소거 기본옵션 설정'),
-              );
+          SwitchListTile.adaptive(
+            value: ref.watch(timelineConfigProvider).muted,
+            onChanged: (value) {
+              ref.read(timelineConfigProvider.notifier).setMuted(value);
             },
+            title: const Text('default Mute'),
+            subtitle: const Text('앱의 음소거 기본옵션 설정'),
           ),
-          AnimatedBuilder(
-              animation: changeNotiConfig,
-              builder: (context, child) {
-                return SwitchListTile(
-                  value: changeNotiConfig.isDarkMode,
-                  onChanged: (value) {
-                    changeNotiConfig.onToggleDarkMode();
-                    MediaQuery.of(context).platformBrightness;
-                  },
-                  title: const Text('DarkMode'),
-                  subtitle: const Text('앱의 다크모드 설정'),
-                );
-              }),
+          SwitchListTile(
+            value: ref.watch(timelineConfigProvider).autoPlay,
+            onChanged: (value) {
+              ref.read(timelineConfigProvider.notifier).setAutoPlay(value);
+            },
+            title: const Text('AutoPlay'),
+            subtitle: const Text('Video TimeLine 자동 재생 설정'),
+          ),
           SwitchListTile.adaptive(
             title: const Text('SwitchTile'),
-            value: _isSelected,
-            onChanged: _onSelect,
+            value: false,
+            onChanged: (value) {},
           ),
           CheckboxListTile.adaptive(
             activeColor: Colors.black,
             title: const Text('SwitchTile'),
-            value: _isSelected,
-            onChanged: _onSelect,
+            value: false,
+            onChanged: (value) {},
           ),
           ListTile(
             onTap: () async {
