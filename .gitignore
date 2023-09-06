@@ -140,3 +140,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter,windows,dart,visualstudiocode
 .metadata
+android/app/google-services.json
+ios/firebase_app_id_file.json
+ios/Runner/GoogleService-Info.plist
+lib/firebase_options.dart

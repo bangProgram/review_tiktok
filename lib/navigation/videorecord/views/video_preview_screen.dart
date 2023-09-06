@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   final XFile file;
   final bool isPicked;
 
@@ -14,10 +16,10 @@ class VideoPreviewScreen extends StatefulWidget {
       {super.key, required this.file, required this.isPicked});
 
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  VideoPreviewScreenState createState() => VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   late final VideoPlayerController _videoPlayerController =
       VideoPlayerController.file(
     File(widget.file.path),
@@ -25,6 +27,7 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
 
   bool _playerInit = false;
   bool? _recordSaved = false;
+  bool _isUpload = false;
 
   @override
   void initState() {
@@ -48,6 +51,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     setState(() {});
   }
 
+  void _onUploadPressed() async {
+    _isUpload = await ref.read(timelineVmProvider.notifier).uploadVideo();
+  }
+
   @override
   void dispose() {
     _videoPlayerController.dispose();
@@ -63,6 +70,19 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         centerTitle: true,
         title: const Text('Preview Video!'),
         actions: [
+          IconButton(
+            onPressed: ref.watch(timelineVmProvider).isLoading
+                ? () {}
+                : _isUpload
+                    ? () {}
+                    : _onUploadPressed,
+            icon: ref.watch(timelineVmProvider).isLoading
+                ? const CircularProgressIndicator()
+                : FaIcon(
+                    FontAwesomeIcons.cloudArrowUp,
+                    color: _isUpload ? Colors.green.shade400 : Colors.black,
+                  ),
+          ),
           if (!widget.isPicked)
             IconButton(
               onPressed: _onGallerySave,

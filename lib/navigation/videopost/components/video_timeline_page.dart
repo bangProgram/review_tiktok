@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/generated/l10n.dart';
+import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_comment_page.dart';
 import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
 import 'package:review_tiktok/navigation/videopost/widgets/video_timeline_button_widget.dart';
@@ -13,11 +14,13 @@ import 'package:visibility_detector/visibility_detector.dart';
 class VideoTimelinePage extends ConsumerStatefulWidget {
   final int pageIndex;
   final bool navSelected;
+  final String title;
 
   const VideoTimelinePage({
     super.key,
     required this.pageIndex,
     required this.navSelected,
+    required this.title,
   });
 
   @override
@@ -32,8 +35,8 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
       VideoPlayerController.asset("assets/videos/pepe.mp4");
 
   bool _isMore = false;
-  late bool _isMuted = ref.read(timelineConfigProvider).muted;
-  late bool _isPlaying = ref.read(timelineConfigProvider).autoPlay;
+  late bool _isMuted = ref.read(settingVmProvider).muted;
+  late bool _isPlaying = ref.read(settingVmProvider).autoPlay;
   @override
   void initState() {
     super.initState();
@@ -223,9 +226,9 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '@Junbang',
-                    style: TextStyle(
+                  Text(
+                    '@${widget.title}',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: Sizes.size16,
                       fontWeight: FontWeight.bold,

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
+import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
 
 class UserSettingScreen extends ConsumerWidget {
   const UserSettingScreen({super.key});
@@ -28,17 +28,17 @@ class UserSettingScreen extends ConsumerWidget {
             title: const Text('about review_tiktok'),
           ),
           SwitchListTile.adaptive(
-            value: ref.watch(timelineConfigProvider).muted,
+            value: ref.watch(settingVmProvider).muted,
             onChanged: (value) {
-              ref.read(timelineConfigProvider.notifier).setMuted(value);
+              ref.read(settingVmProvider.notifier).setMuted(value);
             },
             title: const Text('default Mute'),
             subtitle: const Text('앱의 음소거 기본옵션 설정'),
           ),
           SwitchListTile(
-            value: ref.watch(timelineConfigProvider).autoPlay,
+            value: ref.watch(settingVmProvider).autoPlay,
             onChanged: (value) {
-              ref.read(timelineConfigProvider.notifier).setAutoPlay(value);
+              ref.read(settingVmProvider.notifier).setAutoPlay(value);
             },
             title: const Text('AutoPlay'),
             subtitle: const Text('Video TimeLine 자동 재생 설정'),

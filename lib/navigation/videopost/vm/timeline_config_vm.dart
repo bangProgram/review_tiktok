@@ -1,38 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/navigation/videopost/models/timeline_config_model.dart';
-import 'package:review_tiktok/navigation/videopost/repos/timeline_config_repos.dart';
 
-class TimelineConfigVM extends Notifier<TimelineConfigModel> {
-  final TimelineConfigRepos _repository;
+class TimelineConfigVM extends AsyncNotifier<List<TimelineConfigModel>> {
+  List<TimelineConfigModel> _list = [];
 
-  TimelineConfigVM(this._repository);
-
-  void setMuted(bool value) {
-    _repository.setMuted(value);
-    state = TimelineConfigModel(
-      muted: value,
-      autoPlay: state.autoPlay,
-    );
-  }
-
-  void setAutoPlay(bool value) {
-    _repository.setAutoPlay(value);
-    state = TimelineConfigModel(
-      muted: state.muted,
-      autoPlay: value,
-    );
+  Future<bool> uploadVideo() async {
+    state = const AsyncValue.loading();
+    await Future.delayed(const Duration(seconds: 4));
+    _list = [..._list, TimelineConfigModel(title: "${DateTime.now()}")];
+    state = AsyncValue.data(_list);
+    return true;
   }
 
   @override
-  TimelineConfigModel build() {
-    return TimelineConfigModel(
-      muted: _repository.getMuted(),
-      autoPlay: _repository.getAutoPlay(),
-    );
+  FutureOr<List<TimelineConfigModel>> build() {
+    return _list;
   }
 }
 
-final timelineConfigProvider =
-    NotifierProvider<TimelineConfigVM, TimelineConfigModel>(
-  () => throw UnimplementedError(),
+final timelineVmProvider =
+    AsyncNotifierProvider<TimelineConfigVM, List<TimelineConfigModel>>(
+  () => TimelineConfigVM(),
 );

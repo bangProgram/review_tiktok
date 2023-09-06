@@ -151,13 +151,12 @@ class _VideoRecordScreenState extends State<VideoRecordScreen>
   @override
   Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.inactive) {
-      if (!_camInit) return;
-      _camInit = false;
-      _cameraController.dispose();
+      // if (!_camInit) return;
+      // _camInit = false;
+      // _cameraController.dispose();
     } else if (state == AppLifecycleState.resumed) {
-      await _initCamera();
+      // await _initCamera();
     }
-    setState(() {});
   }
 
   @override

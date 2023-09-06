@@ -1,9 +1,7 @@
 class TimelineConfigModel {
-  final bool muted;
-  final bool autoPlay;
+  final String title;
 
   TimelineConfigModel({
-    required this.muted,
-    required this.autoPlay,
+    required this.title,
   });
 }

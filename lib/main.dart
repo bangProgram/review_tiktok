@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/generated/l10n.dart';
-import 'package:review_tiktok/navigation/videopost/repos/timeline_config_repos.dart';
-import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
+import 'package:review_tiktok/navigation/profile/repos/setting_config_repo.dart';
+import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
 import 'package:review_tiktok/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,13 +16,13 @@ void main() async {
   ]);
 
   final preferences = await SharedPreferences.getInstance();
-  final repository = TimelineConfigRepos(preferences);
+  final repository = SettingConfigRepo(preferences);
 
   runApp(
     ProviderScope(
       overrides: [
-        timelineConfigProvider.overrideWith(
-          () => TimelineConfigVM(repository),
+        settingVmProvider.overrideWith(
+          () => SettingConfigVm(repository),
         ),
       ],
       child: const App(),
