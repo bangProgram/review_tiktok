@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/account/login/views/login_form_screen.dart';
 import 'package:review_tiktok/account/views/signup_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerWidget {
   static const routeName = "login";
   static const routeURL = "/login";
 
@@ -26,7 +28,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -59,9 +61,12 @@ class LoginScreen extends StatelessWidget {
               ),
               Gaps.v16,
               ButtonWidget(
-                buttonIcon: FontAwesomeIcons.facebook,
-                buttonColor: const Color(0xff3772ea),
-                buttonText: 'Continue with Facebook',
+                buttonFunction: () async {
+                  await ref.read(loginVMProvider.notifier).githubLogin(context);
+                },
+                buttonIcon: FontAwesomeIcons.github,
+                // buttonColor: const Color(0xff3772ea),
+                buttonText: 'Continue with Github',
               ),
               Gaps.v16,
               ButtonWidget(

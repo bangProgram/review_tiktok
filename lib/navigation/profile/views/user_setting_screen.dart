@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
 
 class UserSettingScreen extends ConsumerWidget {
@@ -55,6 +56,39 @@ class UserSettingScreen extends ConsumerWidget {
             onChanged: (value) {},
           ),
           ListTile(
+            onTap: () {
+              showCupertinoDialog(
+                barrierDismissible: true,
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: const Text('Are you Sure?'),
+                    content: const Text('real exit?'),
+                    actions: [
+                      CupertinoDialogAction(
+                        isDestructiveAction: true,
+                        child: const Text('Yes'),
+                        onPressed: () {
+                          ref
+                              .read(loginVMProvider.notifier)
+                              .userLogout(context);
+                        },
+                      ),
+                      CupertinoDialogAction(
+                        child: const Text('No'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            title: const Text('Logout'),
+            subtitle: const Text('TikTok clone App ByeBye~'),
+          ),
+          ListTile(
             onTap: () async {
               var date = await showDatePicker(
                 context: context,
@@ -93,11 +127,6 @@ class UserSettingScreen extends ConsumerWidget {
                   );
                 },
               );
-
-              print(
-                  'JB : ${rangeDate!.start.year}-${rangeDate.start.month}-${rangeDate.start.day}');
-              print(
-                  'JB : ${rangeDate.end.year}-${rangeDate.end.month}-${rangeDate.end.day}');
             },
             title: const Text('Range Date picker'),
           ),

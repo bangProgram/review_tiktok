@@ -17,6 +17,7 @@ class SignupScreen extends StatelessWidget {
   const SignupScreen({super.key});
 
   void _goLoginScreen(BuildContext context) {
+    print('여기는 들어오니?');
     context.goNamed(LoginScreen.routeName);
   }
 

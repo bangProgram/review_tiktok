@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/account/signup/view_models/signup_view_model.dart';
 import 'package:review_tiktok/account/signup/views/birthday_screen.dart';
 import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class PasswordScreen extends StatefulWidget {
+class PasswordScreen extends ConsumerStatefulWidget {
   const PasswordScreen({super.key});
 
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  ConsumerState<PasswordScreen> createState() => _PasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _PasswordScreenState extends ConsumerState<PasswordScreen> {
   final TextEditingController _textController = TextEditingController();
 
   String _userPassword = "";
@@ -57,6 +59,11 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
   void _goNextPage() {
     if (_valid) {
+      final befState = ref.read(signupState.notifier).state;
+      ref.read(signupState.notifier).state = {
+        ...befState,
+        "password": _userPassword
+      };
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const BirthdayScreen(),

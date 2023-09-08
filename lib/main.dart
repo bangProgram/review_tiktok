@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:review_tiktok/firebase_options.dart';
 import 'package:review_tiktok/generated/l10n.dart';
 import 'package:review_tiktok/navigation/profile/repos/setting_config_repo.dart';
 import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
@@ -14,6 +16,10 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   final preferences = await SharedPreferences.getInstance();
   final repository = SettingConfigRepo(preferences);
@@ -30,14 +36,14 @@ void main() async {
   );
 }
 
-class App extends StatelessWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     S.load(const Locale('ko'));
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
       localizationsDelegates: const [
         S.delegate,
         GlobalCupertinoLocalizations.delegate,

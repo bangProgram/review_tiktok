@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
-import 'package:review_tiktok/account/interests/views/interest_screen.dart';
+import 'package:review_tiktok/account/signup/view_models/signup_view_model.dart';
 import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/utils.dart';
 
-class BirthdayScreen extends StatefulWidget {
+class BirthdayScreen extends ConsumerStatefulWidget {
   const BirthdayScreen({super.key});
 
   @override
-  State<BirthdayScreen> createState() => _BirthdayScreenState();
+  ConsumerState<BirthdayScreen> createState() => _BirthdayScreenState();
 }
 
-class _BirthdayScreenState extends State<BirthdayScreen> {
+class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
   final TextEditingController _textController = TextEditingController();
   final DateTime _initDate = DateTime(
     DateTime.now().year - 20,
@@ -41,7 +41,9 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _goNextPage() {
-    context.goNamed(InterestScreen.routeName);
+    print('JB State 확인 : ${ref.read(signupState)}');
+    ref.read(signupVMProvider.notifier).userSignup(context);
+    // context.goNamed(InterestScreen.routeName);
   }
 
   void _changeDate(DateTime date) {

@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:go_router/go_router.dart';
-import 'package:review_tiktok/account/interests/views/interest_screen.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/account/login/widgets/login_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class LoginFormScreen extends StatefulWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({super.key});
 
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  ConsumerState<LoginFormScreen> createState() => _LoginFormScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
 
-  final Map<String, dynamic> _userData = {};
+  final Map<String, String> _userData = {};
 
   void _onLoginPress() {
     if (_globalKey.currentState!.validate()) {
       _globalKey.currentState!.save();
-      context.goNamed(InterestScreen.routeName);
+      ref.read(loginVMProvider.notifier).userLogin(
+            context,
+            _userData,
+          );
+      // context.goNamed(InterestScreen.routeName);
     }
     return;
   }
@@ -59,7 +63,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                     hintText: ' Email',
                   ),
                   onSaved: (newValue) {
-                    _userData['email'] = newValue;
+                    _userData['email'] = newValue!;
                   },
                   validator: (value) {
                     if (value != "") {
@@ -74,7 +78,7 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
                     hintText: ' Password',
                   ),
                   onSaved: (newValue) {
-                    _userData['password'] = newValue;
+                    _userData['password'] = newValue!;
                   },
                   validator: (value) {
                     if (value != "") {
