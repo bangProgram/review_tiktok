@@ -27,6 +27,16 @@ class SignupViewModel extends AsyncNotifier<void> {
       context.goNamed(InterestScreen.routeName);
     }
   }
+
+  Future<void> githubSignup(BuildContext context) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async => await _authRepo.githubLogin());
+    if (state.hasError) {
+      showFirebaseError(context, state.error);
+    } else {
+      context.goNamed(InterestScreen.routeName);
+    }
+  }
 }
 
 final signupState = StateProvider((ref) => {});

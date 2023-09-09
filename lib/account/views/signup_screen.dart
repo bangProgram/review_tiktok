@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:review_tiktok/account/signup/view_models/signup_view_model.dart';
 import 'package:review_tiktok/account/signup/views/username_screen.dart';
 import 'package:review_tiktok/account/views/login_screen.dart';
 import 'package:review_tiktok/account/widgets/button_widget.dart';
@@ -10,7 +12,7 @@ import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/tutorial/views/privacy_policy_screen.dart';
 import 'package:review_tiktok/tutorial/views/terms_of_service_screen.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends ConsumerWidget {
   static const routeName = "signup";
   static const routeURL = "/";
 
@@ -48,7 +50,7 @@ class SignupScreen extends StatelessWidget {
 // text: InlineSpan('By continuing, you agree to our Terms of Service and acknowledge that you have read our Privacy Policy to learn how we collect, use, and share your data.')
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -81,9 +83,14 @@ class SignupScreen extends StatelessWidget {
               ),
               Gaps.v16,
               ButtonWidget(
-                buttonIcon: FontAwesomeIcons.facebook,
-                buttonColor: const Color(0xff3772ea),
-                buttonText: 'Continue with Facebook',
+                buttonFunction: () async {
+                  await ref
+                      .read(signupVMProvider.notifier)
+                      .githubSignup(context);
+                },
+                buttonIcon: FontAwesomeIcons.github,
+                // buttonColor: const Color(0xff3772ea),
+                buttonText: 'Continue with Github',
               ),
               Gaps.v16,
               ButtonWidget(
