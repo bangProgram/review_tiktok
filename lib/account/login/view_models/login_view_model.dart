@@ -30,8 +30,12 @@ class LoginViewModel extends AsyncNotifier<void> {
       BuildContext context, Map<String, String> userData) async {
     state = const AsyncValue.loading();
 
-    state = await AsyncValue.guard(() async =>
-        await _authRepo.userLogin(userData['email']!, userData['password']!));
+    state = await AsyncValue.guard(
+      () async {
+        final credential = await _authRepo.userLogin(
+            userData['email']!, userData['password']!);
+      },
+    );
     if (state.hasError) {
       showFirebaseError(context, state.error);
     } else {

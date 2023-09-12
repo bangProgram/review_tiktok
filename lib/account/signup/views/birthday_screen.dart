@@ -42,6 +42,8 @@ class _BirthdayScreenState extends ConsumerState<BirthdayScreen> {
 
   void _goNextPage() {
     print('JB State 확인 : ${ref.read(signupState)}');
+    final state = ref.read(signupState.notifier).state;
+    ref.read(signupState.notifier).state = {...state, "birthday": _setDate};
     ref.read(signupVMProvider.notifier).userSignup(context);
     // context.goNamed(InterestScreen.routeName);
   }

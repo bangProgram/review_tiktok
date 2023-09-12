@@ -5,8 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/firebase_options.dart';
 import 'package:review_tiktok/generated/l10n.dart';
-import 'package:review_tiktok/navigation/profile/repos/setting_config_repo.dart';
-import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
+import 'package:review_tiktok/navigation/profile/repos/profile_setting_repo.dart';
+import 'package:review_tiktok/navigation/profile/view_models/profile_setting_vm.dart';
 import 'package:review_tiktok/route.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,13 +22,13 @@ void main() async {
   );
 
   final preferences = await SharedPreferences.getInstance();
-  final repository = SettingConfigRepo(preferences);
+  final repository = ProfileSettingRepo(preferences);
 
   runApp(
     ProviderScope(
       overrides: [
         settingVmProvider.overrideWith(
-          () => SettingConfigVm(repository),
+          () => ProfileSettingVM(repository),
         ),
       ],
       child: const App(),

@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingConfigRepo {
+class ProfileSettingRepo {
   final SharedPreferences _preferences;
 
   static const String muted = "muted";
@@ -22,5 +22,5 @@ class SettingConfigRepo {
     return _preferences.getBool(autoPlay) ?? false;
   }
 
-  SettingConfigRepo(this._preferences);
+  ProfileSettingRepo(this._preferences);
 }

@@ -21,10 +21,7 @@ class _LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   void _onLoginPress() {
     if (_globalKey.currentState!.validate()) {
       _globalKey.currentState!.save();
-      ref.read(loginVMProvider.notifier).userLogin(
-            context,
-            _userData,
-          );
+      ref.read(loginVMProvider.notifier).userLogin(context, _userData);
       // context.goNamed(InterestScreen.routeName);
     }
     return;

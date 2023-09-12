@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
-import 'package:review_tiktok/navigation/profile/vm/setting_config_vm.dart';
+import 'package:review_tiktok/navigation/profile/view_models/profile_setting_vm.dart';
 
 class UserSettingScreen extends ConsumerWidget {
   const UserSettingScreen({super.key});
@@ -57,24 +57,26 @@ class UserSettingScreen extends ConsumerWidget {
           ),
           ListTile(
             onTap: () {
-              showCupertinoDialog(
+              showDialog(
                 barrierDismissible: true,
                 context: context,
                 builder: (context) {
-                  return CupertinoAlertDialog(
+                  return AlertDialog(
                     title: const Text('Are you Sure?'),
                     content: const Text('real exit?'),
                     actions: [
-                      CupertinoDialogAction(
-                        isDestructiveAction: true,
-                        child: const Text('Yes'),
+                      TextButton(
+                        child: const Text(
+                          'Yes',
+                          style: TextStyle(color: Colors.red),
+                        ),
                         onPressed: () {
                           ref
                               .read(loginVMProvider.notifier)
                               .userLogout(context);
                         },
                       ),
-                      CupertinoDialogAction(
+                      TextButton(
                         child: const Text('No'),
                         onPressed: () {
                           Navigator.pop(context);

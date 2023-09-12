@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/account/signup/view_models/signup_view_model.dart';
 import 'package:review_tiktok/account/signup/views/emailadress_screen.dart';
 import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 
-class UsernameScreen extends StatefulWidget {
+class UsernameScreen extends ConsumerStatefulWidget {
   const UsernameScreen({super.key});
 
   @override
-  State<UsernameScreen> createState() => _UsernameScreenState();
+  ConsumerState<UsernameScreen> createState() => _UsernameScreenState();
 }
 
-class _UsernameScreenState extends State<UsernameScreen> {
+class _UsernameScreenState extends ConsumerState<UsernameScreen> {
   final TextEditingController _textController = TextEditingController();
 
   String _userName = "";
@@ -49,6 +51,8 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
   void _goNextPage() {
     if (_valid) {
+      ref.read(signupState.notifier).state = {'name': _userName};
+
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const EmailAdressScreen(),

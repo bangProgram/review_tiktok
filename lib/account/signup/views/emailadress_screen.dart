@@ -61,7 +61,8 @@ class _EmailAdressScreenState extends ConsumerState<EmailAdressScreen> {
 
   void _goNextPage() {
     if (_valid) {
-      ref.read(signupState.notifier).state = {"email": _userEmail};
+      final state = ref.read(signupState.notifier).state;
+      ref.read(signupState.notifier).state = {...state, "email": _userEmail};
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const PasswordScreen(),

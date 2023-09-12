@@ -107,11 +107,10 @@ class _InterestScreenState extends State<InterestScreen> {
   }
 
   void _onSkipPressed() {
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const TutorialMainScreen(),
       ),
-      (route) => false,
     );
   }
 
