@@ -16,11 +16,8 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     _profileUserRepo = ref.read(profileUserRepo);
     if (_authenticationRepo.isLogin) {
       final uid = _authenticationRepo.user!.uid;
-      print('JB 확인 : $uid');
       final user = await _profileUserRepo.findUser(uid);
-      print('JB 확인 : $user');
       if (user != null) {
-        print('JB 확인 : ${ProfileUserModel.fromJson(user)}');
         return ProfileUserModel.fromJson(user);
       }
     }
@@ -34,15 +31,7 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     }
     state = const AsyncValue.loading();
     final uid = credential.user!.uid;
-    print('JB 확인 : ${data.runtimeType}');
-    final profile = ProfileUserModel(
-        uid: uid,
-        name: data["name"],
-        email: data["email"],
-        birthday: data["birthday"],
-        bio: "bio",
-        link: "link");
-    print('JB 확인 : $profile');
+    final profile = state.value!.copyWith(data);
     await _profileUserRepo.createUser(uid, profile);
     state = AsyncValue.data(profile);
   }
@@ -51,6 +40,14 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     state = const AsyncValue.loading();
     final uid = _authenticationRepo.user!.uid;
     return _profileUserRepo.findUser(uid);
+  }
+
+  Future<void> updateProfile(Map<dynamic, dynamic> data) async {
+    state = const AsyncValue.loading();
+    final uid = ref.read(authRepo).user!.uid;
+    final profile = state.value!.copyWith(data);
+    await _profileUserRepo.updateUser(uid, profile);
+    state = AsyncValue.data(profile);
   }
 }
 

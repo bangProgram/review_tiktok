@@ -24,7 +24,13 @@ class SignupViewModel extends AsyncNotifier<void> {
         user['email'],
         user['password'],
       );
-      await ref.read(profileUserProvider.notifier).createUser(credential, user);
+
+      final data = {...user, "uid": credential.user!.uid};
+      if (credential.user != null) {
+        await ref
+            .read(profileUserProvider.notifier)
+            .createUser(credential, data);
+      }
     });
     if (state.hasError) {
       showFirebaseError(context, state.error);

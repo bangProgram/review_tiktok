@@ -1,5 +1,11 @@
 class ProfileUserModel {
-  final String uid, name, email, birthday, bio, link;
+  final String uid;
+  final String name;
+  final String email;
+  final String birthday;
+  final String bio;
+  final String link;
+  final bool hasAvatar;
 
   ProfileUserModel({
     required this.uid,
@@ -8,6 +14,7 @@ class ProfileUserModel {
     required this.birthday,
     required this.bio,
     required this.link,
+    required this.hasAvatar,
   });
 
   ProfileUserModel.empty()
@@ -16,17 +23,19 @@ class ProfileUserModel {
         email = "",
         link = "",
         name = "",
-        uid = "";
+        uid = "",
+        hasAvatar = false;
 
-  ProfileUserModel.fromJson(Map<dynamic, dynamic> json)
-      : uid = json["uid"] as String,
-        email = json["email"] as String,
-        name = json["name"] as String,
-        birthday = json["birthday"] as String,
-        link = json["link"] as String,
-        bio = json["bio"] as String;
+  ProfileUserModel.fromJson(Map<String, dynamic> json)
+      : uid = json["uid"],
+        email = json["email"],
+        name = json["name"],
+        birthday = json["birthday"],
+        link = json["link"],
+        bio = json["bio"],
+        hasAvatar = json["hasAvatar"];
 
-  Map<String, String> tojson() {
+  Map<String, dynamic> tojson() {
     return {
       "uid": uid,
       "name": name,
@@ -34,6 +43,19 @@ class ProfileUserModel {
       "birthday": birthday,
       "bio": bio,
       "link": link,
+      "hasAvatar": hasAvatar,
     };
+  }
+
+  ProfileUserModel copyWith(Map<dynamic, dynamic> data) {
+    return ProfileUserModel(
+      uid: data['uid'] ?? uid,
+      name: data['name'] ?? name,
+      email: data['email'] ?? email,
+      birthday: data['birthday'] ?? birthday,
+      bio: data['bio'] ?? bio,
+      link: data['link'] ?? link,
+      hasAvatar: data['hasAvatar'] ?? hasAvatar,
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/profile/view_models/profile_user_vm.dart';
+import 'package:review_tiktok/navigation/profile/views/user_edit_screen.dart';
 import 'package:review_tiktok/navigation/profile/views/user_setting_screen.dart';
 import 'package:review_tiktok/navigation/profile/widgets/sliver_haeder_tabbar.dart';
 import 'package:review_tiktok/utils.dart';
@@ -20,6 +21,14 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const UserSettingScreen(),
+      ),
+    );
+  }
+
+  void _goUserEditScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const UserEditScreen(),
       ),
     );
   }
@@ -49,12 +58,45 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                         ),
                       ),
                       actions: [
-                        IconButton(
-                          onPressed: _goSetting,
-                          icon: FaIcon(
-                            FontAwesomeIcons.gear,
-                            color: isDarkMode(context) ? null : Colors.black,
-                            size: Sizes.size18,
+                        Container(
+                          width: MediaQuery.of(context).size.width / 4.5,
+                          padding: const EdgeInsets.only(right: Sizes.size10),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: _goUserEditScreen,
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    alignment: Alignment.center,
+                                    child: FaIcon(
+                                      FontAwesomeIcons.userPen,
+                                      color: isDarkMode(context)
+                                          ? null
+                                          : Colors.black,
+                                      size: Sizes.size18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: _goSetting,
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    alignment: Alignment.center,
+                                    child: FaIcon(
+                                      FontAwesomeIcons.gear,
+                                      color: isDarkMode(context)
+                                          ? null
+                                          : Colors.black,
+                                      size: Sizes.size18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -71,11 +113,11 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                                 width: 2,
                               ),
                             ),
-                            child: const CircleAvatar(
+                            child: CircleAvatar(
                               radius: Sizes.size40,
-                              foregroundImage:
-                                  AssetImage("assets/images/Acrid2.jpg"),
-                              child: Text('Junbang'),
+                              foregroundImage: NetworkImage(
+                                  'https://firebasestorage.googleapis.com/v0/b/jb-review-tiktok-clone.appspot.com/o/users%2F${data.uid}?alt=media&token=9878200a-835b-4268-88dc-939b011fe013'),
+                              child: const Text('Junbang'),
                             ),
                           ),
                           Gaps.v10,
@@ -148,12 +190,12 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                             ),
                           ),
                           Gaps.v14,
-                          const Padding(
-                            padding: EdgeInsets.symmetric(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: Sizes.size10,
                             ),
                             child: Text(
-                              "AII hi hli hts and where to watch live matches on FIFA+",
+                              data.bio,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -179,17 +221,17 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                             ],
                           ),
                           Gaps.v14,
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FaIcon(
+                              const FaIcon(
                                 FontAwesomeIcons.link,
                                 size: Sizes.size12,
                               ),
                               Gaps.h4,
                               Text(
-                                "https://www.fifa.com/fifaplus/en/home",
-                                style: TextStyle(
+                                data.link,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

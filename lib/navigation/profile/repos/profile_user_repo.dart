@@ -13,6 +13,10 @@ class ProfileUserRepo {
     final doc = await _db.collection('users').doc(uid).get();
     return doc.data();
   }
+
+  Future<void> updateUser(String uid, ProfileUserModel data) async {
+    await _db.collection('users').doc(uid).update(data.tojson());
+  }
 }
 
 final profileUserRepo = Provider((ref) => ProfileUserRepo());

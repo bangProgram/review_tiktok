@@ -32,8 +32,7 @@ class LoginViewModel extends AsyncNotifier<void> {
 
     state = await AsyncValue.guard(
       () async {
-        final credential = await _authRepo.userLogin(
-            userData['email']!, userData['password']!);
+        await _authRepo.userLogin(userData['email']!, userData['password']!);
       },
     );
     if (state.hasError) {
