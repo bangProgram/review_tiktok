@@ -17,12 +17,14 @@ class _UserEditScreenState extends ConsumerState<UserEditScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final Map<String, dynamic> _formdata = {};
+  bool isChange = false;
 
   Future<void> _onSaveProfile() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      print('formdata 확인 : $_formdata');
-      await ref.read(profileUserProvider.notifier).updateProfile(_formdata);
+      print(isChange);
+      if (isChange) {
+        await ref.read(profileUserProvider.notifier).updateProfile(_formdata);
+      }
       Navigator.pop(context);
     }
   }
@@ -84,6 +86,10 @@ class _UserEditScreenState extends ConsumerState<UserEditScreen> {
                           } else {
                             if (value.length < 3) {
                               return '이름은 3글자 이상 작성해주세요';
+                            } else {
+                              if (data.name != value) {
+                                isChange = true;
+                              }
                             }
                           }
                           return null;
@@ -97,6 +103,12 @@ class _UserEditScreenState extends ConsumerState<UserEditScreen> {
                       TextFormField(
                         initialValue: data.bio,
                         maxLines: null,
+                        validator: (value) {
+                          if (data.bio != value) {
+                            isChange = true;
+                          }
+                          return null;
+                        },
                         onSaved: (newValue) {
                           _formdata['bio'] = newValue;
                         },
@@ -105,6 +117,12 @@ class _UserEditScreenState extends ConsumerState<UserEditScreen> {
                       const Text('링크'),
                       TextFormField(
                         initialValue: data.link,
+                        validator: (value) {
+                          if (data.link != value) {
+                            isChange = true;
+                          }
+                          return null;
+                        },
                         onSaved: (newValue) {
                           _formdata['link'] = newValue;
                         },

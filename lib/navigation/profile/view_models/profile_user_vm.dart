@@ -36,12 +36,6 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     state = AsyncValue.data(profile);
   }
 
-  Future<Map<String, dynamic>?> findUser() async {
-    state = const AsyncValue.loading();
-    final uid = _authenticationRepo.user!.uid;
-    return _profileUserRepo.findUser(uid);
-  }
-
   Future<void> updateProfile(Map<dynamic, dynamic> data) async {
     state = const AsyncValue.loading();
     final uid = ref.read(authRepo).user!.uid;
