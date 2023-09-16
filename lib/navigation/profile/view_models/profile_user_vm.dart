@@ -39,6 +39,7 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
   Future<void> updateProfile(Map<dynamic, dynamic> data) async {
     state = const AsyncValue.loading();
     final uid = ref.read(authRepo).user!.uid;
+    print('JB data 안들어와? $data');
     final profile = state.value!.copyWith(data);
     await _profileUserRepo.updateUser(uid, profile);
     state = AsyncValue.data(profile);

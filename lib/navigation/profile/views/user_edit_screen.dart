@@ -21,7 +21,7 @@ class _UserEditScreenState extends ConsumerState<UserEditScreen> {
 
   Future<void> _onSaveProfile() async {
     if (_formKey.currentState!.validate()) {
-      print(isChange);
+      _formKey.currentState!.save();
       if (isChange) {
         await ref.read(profileUserProvider.notifier).updateProfile(_formdata);
       }

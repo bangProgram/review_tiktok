@@ -27,6 +27,7 @@ class SignupViewModel extends AsyncNotifier<void> {
 
       final data = {...user, "uid": credential.user!.uid};
       if (credential.user != null) {
+        print('여기는 들어가냐?');
         await ref
             .read(profileUserProvider.notifier)
             .createUser(credential, data);

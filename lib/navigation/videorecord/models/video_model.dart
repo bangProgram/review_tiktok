@@ -3,8 +3,8 @@ class VideoModel {
   final String descript;
   final String creator;
   final String creatorUid;
-  final String videoURL;
-  final String thumbURL;
+  final String fileURL;
+  final String thumbnailURL;
   final int likes;
   final int comments;
   final int creatAt;
@@ -14,8 +14,8 @@ class VideoModel {
     required this.descript,
     required this.creator,
     required this.creatorUid,
-    required this.videoURL,
-    required this.thumbURL,
+    required this.fileURL,
+    required this.thumbnailURL,
     required this.likes,
     required this.comments,
     required this.creatAt,
@@ -26,8 +26,8 @@ class VideoModel {
         descript = json['descript'],
         creator = json['creator'],
         creatorUid = json['creatorUid'],
-        videoURL = json['videoURL'],
-        thumbURL = json['thumbURL'],
+        fileURL = json['fileURL'],
+        thumbnailURL = json['thumbnailURL'],
         likes = json['likes'],
         comments = json['comments'],
         creatAt = json['creatAt'];
@@ -38,8 +38,8 @@ class VideoModel {
       'descript': descript,
       'creator': creator,
       'creatorUid': creatorUid,
-      'videoURL': videoURL,
-      'thumbURL': thumbURL,
+      'fileURL': fileURL,
+      'thumbnailURL': thumbnailURL,
       'likes': likes,
       'comments': comments,
       'creatAt': creatAt,
