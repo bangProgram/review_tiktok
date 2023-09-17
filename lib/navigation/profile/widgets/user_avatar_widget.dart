@@ -27,7 +27,6 @@ class UserAvatarWidget extends ConsumerWidget {
         maxWidth: 150);
 
     if (xfile != null) {
-      print('file 존재함');
       final file = File(xfile.path);
       await ref.read(profileAvatarProvider.notifier).uploadAvatar(file);
     }
