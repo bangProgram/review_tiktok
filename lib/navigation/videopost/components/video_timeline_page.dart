@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/generated/l10n.dart';
 import 'package:review_tiktok/navigation/profile/view_models/profile_setting_vm.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_comment_page.dart';
+import 'package:review_tiktok/navigation/videopost/vm/video_timeline_vm.dart';
 import 'package:review_tiktok/navigation/videopost/widgets/video_timeline_button_widget.dart';
+import 'package:review_tiktok/navigation/videorecord/models/video_model.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoTimelinePage extends ConsumerStatefulWidget {
   final int pageIndex;
   final bool navSelected;
-  final String title;
+  final VideoModel videoData;
 
   const VideoTimelinePage({
     super.key,
     required this.pageIndex,
     required this.navSelected,
-    required this.title,
+    required this.videoData,
   });
 
   @override
@@ -29,11 +32,14 @@ class VideoTimelinePage extends ConsumerStatefulWidget {
 class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
     with SingleTickerProviderStateMixin {
   late final AnimationController _animationController;
-
-  final VideoPlayerController _videoPlayerController =
-      VideoPlayerController.asset("assets/videos/pepe.mp4");
+  late final Uri videoURL = Uri.parse(widget.videoData.fileURL);
+  late final VideoPlayerController _videoPlayerController =
+      VideoPlayerController.networkUrl(videoURL);
 
   bool _isMore = false;
+  late String uId = ref.read(authRepo).user!.uid;
+  late bool _isLike = widget.videoData.liker.contains(uId);
+  late int _likeCnt = widget.videoData.likes;
   late bool _isMuted = ref.read(settingVmProvider).muted;
   late bool _isPlaying = ref.read(settingVmProvider).autoPlay;
   @override
@@ -126,6 +132,20 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
     });
   }
 
+  Future<void> toggleLikeVideo() async {
+    _isLike = !_isLike;
+    if (_isLike) {
+      _likeCnt = _likeCnt + 1;
+    } else {
+      _likeCnt = _likeCnt - 1;
+    }
+    setState(() {});
+
+    await ref
+        .read(timelineProvider.notifier)
+        .toggleLikeVideo(widget.videoData.videoId, widget.videoData.liker);
+  }
+
   @override
   void dispose() {
     print('jb ${widget.pageIndex} Page : dispose! ');
@@ -199,9 +219,13 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
                     ),
                   ),
                   Gaps.v20,
-                  const VideoTimelintButtonWidget(
-                    icon: FontAwesomeIcons.solidHeart,
-                    text: '2.9M',
+                  GestureDetector(
+                    onTap: toggleLikeVideo,
+                    child: VideoTimelintButtonWidget(
+                      icon: FontAwesomeIcons.solidHeart,
+                      text: '${widget.videoData.liker.length}',
+                      active: _isLike,
+                    ),
                   ),
                   Gaps.v20,
                   GestureDetector(
@@ -209,12 +233,14 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
                     child: VideoTimelintButtonWidget(
                       icon: FontAwesomeIcons.solidComment,
                       text: S.of(context).commentCount(331000),
+                      active: false,
                     ),
                   ),
                   Gaps.v20,
                   const VideoTimelintButtonWidget(
                     icon: FontAwesomeIcons.share,
                     text: 'Share',
+                    active: false,
                   ),
                 ],
               ),
@@ -226,7 +252,7 @@ class VideoTimelinePageState extends ConsumerState<VideoTimelinePage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '@${widget.title}',
+                    '@${widget.videoData.title}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: Sizes.size16,

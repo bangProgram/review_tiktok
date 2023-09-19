@@ -8,6 +8,8 @@ class VideoModel {
   final int likes;
   final int comments;
   final int creatAt;
+  final List liker;
+  final String videoId;
 
   VideoModel({
     required this.title,
@@ -19,9 +21,11 @@ class VideoModel {
     required this.likes,
     required this.comments,
     required this.creatAt,
+    required this.liker,
+    required this.videoId,
   });
 
-  VideoModel.fromJson(Map<String, dynamic> json)
+  VideoModel.fromJson(Map<String, dynamic> json, String id)
       : title = json['title'],
         descript = json['descript'],
         creator = json['creator'],
@@ -29,8 +33,10 @@ class VideoModel {
         fileURL = json['fileURL'],
         thumbnailURL = json['thumbnailURL'],
         likes = json['likes'],
+        liker = json['liker'],
         comments = json['comments'],
-        creatAt = json['creatAt'];
+        creatAt = json['creatAt'],
+        videoId = id;
 
   Map<String, dynamic> toJson() {
     return {
@@ -41,6 +47,7 @@ class VideoModel {
       'fileURL': fileURL,
       'thumbnailURL': thumbnailURL,
       'likes': likes,
+      'liker': liker,
       'comments': comments,
       'creatAt': creatAt,
     };

@@ -6,11 +6,13 @@ import 'package:review_tiktok/constants/sizes.dart';
 class VideoTimelintButtonWidget extends StatelessWidget {
   final String text;
   final IconData icon;
+  final bool active;
 
   const VideoTimelintButtonWidget({
     super.key,
     required this.text,
     required this.icon,
+    required this.active,
   });
 
   @override
@@ -22,7 +24,7 @@ class VideoTimelintButtonWidget extends StatelessWidget {
           FaIcon(
             icon,
             size: Sizes.size36,
-            color: Colors.white,
+            color: active ? Colors.red : Colors.white,
           ),
           Gaps.v5,
           Text(

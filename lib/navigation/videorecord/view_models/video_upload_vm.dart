@@ -36,8 +36,10 @@ class VideoUploadVm extends AsyncNotifier<void> {
               fileURL: videoURL,
               thumbnailURL: "thumbnailURL",
               likes: 0,
+              liker: [],
               comments: 0,
               creatAt: DateTime.now().millisecondsSinceEpoch,
+              videoId: "",
             ),
           ),
         );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:review_tiktok/navigation/videopost/components/video_timeline_page.dart';
-import 'package:review_tiktok/navigation/videopost/vm/timeline_config_vm.dart';
+import 'package:review_tiktok/navigation/videopost/vm/video_timeline_vm.dart';
 
 class VideoTimelineScreen extends ConsumerStatefulWidget {
   final bool navSelected;
@@ -14,10 +14,20 @@ class VideoTimelineScreen extends ConsumerStatefulWidget {
 
 class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
   final PageController _pageController = PageController();
-
+  int _videoCnt = 0;
   @override
   void initState() {
     super.initState();
+  }
+
+  Future<void> reloadVideo(int index) async {
+    if (index == _videoCnt - 1) {
+      await ref.read(timelineProvider.notifier).reloadVideo();
+    }
+  }
+
+  Future<void> refreshVideo() async {
+    await ref.read(timelineProvider.notifier).refreshVideo();
   }
 
   @override
@@ -28,19 +38,25 @@ class VideoTimelineScreenState extends ConsumerState<VideoTimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(timelineVmProvider).when(
+    return ref.watch(timelineProvider).when(
           data: (video) {
-            return PageView.builder(
-              controller: _pageController,
-              scrollDirection: Axis.vertical,
-              itemCount: video.length,
-              itemBuilder: (context, index) {
-                return VideoTimelinePage(
-                  navSelected: widget.navSelected,
-                  pageIndex: index,
-                  title: video[index].title,
-                );
-              },
+            _videoCnt = video.length;
+            return RefreshIndicator(
+              onRefresh: refreshVideo,
+              child: PageView.builder(
+                controller: _pageController,
+                scrollDirection: Axis.vertical,
+                onPageChanged: reloadVideo,
+                itemCount: video.length,
+                itemBuilder: (context, index) {
+                  final videoData = video[index];
+                  return VideoTimelinePage(
+                    navSelected: widget.navSelected,
+                    pageIndex: index,
+                    videoData: videoData,
+                  );
+                },
+              ),
             );
           },
           error: (error, stackTrace) => Center(
