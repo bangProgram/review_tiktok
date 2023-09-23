@@ -5,6 +5,7 @@ class ProfileUserModel {
   final String birthday;
   final String bio;
   final String link;
+  final String avatarURL;
   final bool hasAvatar;
 
   ProfileUserModel({
@@ -14,6 +15,7 @@ class ProfileUserModel {
     required this.birthday,
     required this.bio,
     required this.link,
+    required this.avatarURL,
     required this.hasAvatar,
   });
 
@@ -24,6 +26,7 @@ class ProfileUserModel {
         link = "",
         name = "",
         uid = "",
+        avatarURL = "",
         hasAvatar = false;
 
   ProfileUserModel.fromJson(Map<String, dynamic> json)
@@ -33,6 +36,7 @@ class ProfileUserModel {
         birthday = json["birthday"],
         link = json["link"],
         bio = json["bio"],
+        avatarURL = json["avatarURL"],
         hasAvatar = json["hasAvatar"];
 
   Map<String, dynamic> tojson() {
@@ -43,6 +47,7 @@ class ProfileUserModel {
       "birthday": birthday,
       "bio": bio,
       "link": link,
+      "avatarURL": avatarURL,
       "hasAvatar": hasAvatar,
     };
   }
@@ -55,6 +60,7 @@ class ProfileUserModel {
       birthday: data['birthday'] ?? birthday,
       bio: data['bio'] ?? bio,
       link: data['link'] ?? link,
+      avatarURL: data['avatarURL'] ?? avatarURL,
       hasAvatar: data['hasAvatar'] ?? hasAvatar,
     );
   }

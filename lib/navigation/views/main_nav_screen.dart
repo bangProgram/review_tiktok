@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
 import 'package:review_tiktok/navigation/discover/views/discover_screen.dart';
 import 'package:review_tiktok/navigation/inbox/views/inbox_screen.dart';
+import 'package:review_tiktok/navigation/profile/view_models/profile_user_vm.dart';
 import 'package:review_tiktok/navigation/profile/views/user_profile_screen.dart';
 import 'package:review_tiktok/navigation/videopost/views/video_timeline_screen.dart';
 import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
 import 'package:review_tiktok/navigation/widgets/main_nav_button_widget.dart';
 import 'package:review_tiktok/utils.dart';
 
-class MainNavScreen extends StatefulWidget {
+class MainNavScreen extends ConsumerStatefulWidget {
   static const routeName = "home";
   static const routeURL = "/inbox";
 
@@ -19,10 +22,10 @@ class MainNavScreen extends StatefulWidget {
   const MainNavScreen({super.key, required this.tab});
 
   @override
-  State<MainNavScreen> createState() => _MainNavScreenState();
+  ConsumerState<MainNavScreen> createState() => _MainNavScreenState();
 }
 
-class _MainNavScreenState extends State<MainNavScreen> {
+class _MainNavScreenState extends ConsumerState<MainNavScreen> {
   List<String> tabs = [
     'home',
     'discover',
@@ -34,6 +37,14 @@ class _MainNavScreenState extends State<MainNavScreen> {
   late int _currentPage = tabs.indexOf(widget.tab);
 
   void _pageSelect(int index) {
+    if (tabs[index] == 'profile') {
+      final userModel = ref.read(loginVMProvider).value;
+      if (userModel != null) {
+        ref.read(profileUserProvider.notifier).reloadProfileByModel(userModel);
+      } else {
+        return;
+      }
+    }
     setState(() {
       _currentPage = index;
       context.go('/${tabs[index]}');

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/navigation/profile/models/profile_user_model.dart';
 import 'package:review_tiktok/navigation/profile/repos/profile_user_repo.dart';
@@ -15,10 +16,9 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     _authenticationRepo = ref.read(authRepo);
     _profileUserRepo = ref.read(profileUserRepo);
     if (_authenticationRepo.isLogin) {
-      final uid = _authenticationRepo.user!.uid;
-      final user = await _profileUserRepo.findUser(uid);
+      final user = ref.read(loginVMProvider).value;
       if (user != null) {
-        return ProfileUserModel.fromJson(user);
+        return user;
       }
     }
     return ProfileUserModel.empty();
@@ -39,10 +39,33 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
   Future<void> updateProfile(Map<dynamic, dynamic> data) async {
     state = const AsyncValue.loading();
     final uid = ref.read(authRepo).user!.uid;
-    print('JB data 안들어와? $data');
     final profile = state.value!.copyWith(data);
     await _profileUserRepo.updateUser(uid, profile);
     state = AsyncValue.data(profile);
+    ref.read(loginVMProvider.notifier).state = state;
+  }
+
+  Future<ProfileUserModel> findProfile(String uid) async {
+    final user = await _profileUserRepo.findProfile(uid);
+    if (user != null) {
+      final userModel = ProfileUserModel.fromJson(user);
+      state = AsyncValue.data(userModel);
+      return userModel;
+    } else {
+      throw Exception('사용자를 찾지못했습니다.');
+    }
+  }
+
+  Future<List<ProfileUserModel>> findProfileList() async {
+    final user = ref.read(authRepo).user!;
+    final snapshot = await _profileUserRepo.findProfileList(user.uid);
+    return snapshot.docs
+        .map((e) => ProfileUserModel.fromJson(e.data()))
+        .toList();
+  }
+
+  Future<void> reloadProfileByModel(ProfileUserModel user) async {
+    state = AsyncValue.data(user);
   }
 }
 

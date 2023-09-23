@@ -9,13 +9,18 @@ class ProfileUserRepo {
     await _db.collection('users').doc(uid).set(data.tojson());
   }
 
-  Future<Map<String, dynamic>?> findUser(String uid) async {
+  Future<Map<String, dynamic>?> findProfile(String uid) async {
     final doc = await _db.collection('users').doc(uid).get();
     return doc.data();
   }
 
   Future<void> updateUser(String uid, ProfileUserModel data) async {
     await _db.collection('users').doc(uid).update(data.tojson());
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> findProfileList(
+      String uid) async {
+    return await _db.collection('users').where('uid', isNotEqualTo: uid).get();
   }
 }
 

@@ -1,70 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/constants/gaps.dart';
 import 'package:review_tiktok/constants/sizes.dart';
+import 'package:review_tiktok/navigation/inbox/chats/models/chats_model.dart';
+import 'package:review_tiktok/navigation/inbox/chats/view_models/chats_vm.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
+import 'package:review_tiktok/navigation/inbox/chats/views/chat_user_screen.dart';
 
-class ChatsScreen extends StatefulWidget {
+class ChatsScreen extends ConsumerStatefulWidget {
   static const routeName = "chat";
   static const routeURL = "/chat";
   const ChatsScreen({super.key});
 
   @override
-  State<ChatsScreen> createState() => _ChatsScreenState();
+  ConsumerState<ChatsScreen> createState() => _ChatsScreenState();
 }
 
-class _ChatsScreenState extends State<ChatsScreen> {
-  final GlobalKey<AnimatedListState> _globalKey =
-      GlobalKey<AnimatedListState>();
-
-  final List<int> _dmList = [];
-
+class _ChatsScreenState extends ConsumerState<ChatsScreen> {
   void _addDirectMessage() {
-    if (_globalKey.currentState != null) {
-      _globalKey.currentState!.insertItem(_dmList.length);
-    }
-    _dmList.add(_dmList.length);
-  }
-
-  void _delDirectMessage(int index) {
-    if (_globalKey.currentState != null) {
-      _globalKey.currentState!.removeItem(
-        index,
-        (context, animation) => SizeTransition(
-          sizeFactor: animation,
-          child: _makeDirectMessage(),
-        ),
-      );
-    }
-    _dmList.removeAt(index);
-  }
-
-  void _goChatDetail(int index) {
-    context.pushNamed(
-      ChatDetailScreen.routeName,
-      pathParameters: {"userId": "junbang_$index"},
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ChatUserScreen(),
+      ),
     );
   }
 
-  Widget _makeDirectMessage() {
+  void _delDirectMessage(int index) {}
+
+  void _goChatDetail(ChatsModel chatroom) {
+    print('ChatDetailScreen.routeName : ${ChatDetailScreen.routeName}');
+    context.pushNamed(
+      ChatDetailScreen.routeName,
+      pathParameters: {
+        "chatId": chatroom.chatId,
+      },
+    );
+  }
+
+  Widget _makeDirectMessage(ChatsModel chatroom) {
+    final time = DateTime.fromMillisecondsSinceEpoch(chatroom.changeAt);
+    print('time : $time');
     return ListTile(
-      leading: const CircleAvatar(
+      leading: CircleAvatar(
         radius: Sizes.size28,
         backgroundColor: Colors.blue,
-        child: Text('전뱅'),
+        foregroundImage: chatroom.titleAvatar != ""
+            ? NetworkImage(chatroom.titleAvatar)
+            : null,
+        child: chatroom.titleAvatar != "" ? null : Text(chatroom.title),
       ),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Junbang',
-            style: TextStyle(
+          Text(
+            chatroom.title,
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            '2:16 PM',
+            '${time.hour}:${time.minute}',
             style: TextStyle(
               color: Colors.grey.shade500,
               fontSize: Sizes.size14,
@@ -73,9 +71,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
           ),
         ],
       ),
-      subtitle: const Text(
-        'junbang아 집에가서 도시락 먹어라 살빼야지???',
-        style: TextStyle(
+      subtitle: Text(
+        chatroom.recentMsg,
+        style: const TextStyle(
           fontSize: Sizes.size14,
         ),
       ),
@@ -84,6 +82,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.read(authRepo).user!;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -104,30 +103,31 @@ class _ChatsScreenState extends State<ChatsScreen> {
           ),
         ],
       ),
-      body: AnimatedList(
-        key: _globalKey,
-        padding: const EdgeInsets.symmetric(
-          vertical: Sizes.size10,
-        ),
-        itemBuilder: (context, index, animation) {
-          return Column(
-            children: [
-              GestureDetector(
-                onLongPress: () => _delDirectMessage(index),
-                onTap: () => _goChatDetail(index),
-                child: FadeTransition(
-                  opacity: animation,
-                  child: ScaleTransition(
-                    scale: animation,
-                    child: _makeDirectMessage(),
-                  ),
-                ),
-              ),
-              Gaps.v2,
-            ],
-          );
-        },
-      ),
+      body: ref.watch(chatsStream(user.uid)).when(
+            error: (error, stackTrace) {
+              return Center(
+                child: Text('Error : $error'),
+              );
+            },
+            loading: () => const CircularProgressIndicator(),
+            data: (data) => ListView.separated(
+              separatorBuilder: (context, index) => Gaps.v10,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final chatroom = data[index];
+                return Column(
+                  children: [
+                    GestureDetector(
+                      onLongPress: () => _delDirectMessage(index),
+                      onTap: () => _goChatDetail(chatroom),
+                      child: _makeDirectMessage(chatroom),
+                    ),
+                    Gaps.v2,
+                  ],
+                );
+              },
+            ),
+          ),
     );
   }
 }

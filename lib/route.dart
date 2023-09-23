@@ -7,6 +7,7 @@ import 'package:review_tiktok/account/views/signup_screen.dart';
 import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/navigation/inbox/activity/views/activity_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chat_detail_screen.dart';
+import 'package:review_tiktok/navigation/inbox/chats/views/chat_user_screen.dart';
 import 'package:review_tiktok/navigation/inbox/chats/views/chats_screen.dart';
 import 'package:review_tiktok/navigation/videorecord/views/video_recode_screen.dart';
 import 'package:review_tiktok/navigation/views/main_nav_screen.dart';
@@ -16,8 +17,11 @@ final routerProvider = Provider(
     return GoRouter(
       initialLocation: "/inbox",
       redirect: (context, state) {
-        final isLogin = ref.read(authRepo).isLogin;
+        final isLogin = ref.watch(authRepo).isLogin;
+        final user = ref.watch(authRepo).user;
+        print('Router : Login 유무 확인 : $isLogin');
         if (!isLogin) {
+          print('Router : Login user : ${user!.email}');
           if (state.uri.toString() != SignupScreen.routeURL &&
               state.uri.toString() != LoginScreen.routeURL) {
             return SignupScreen.routeURL;
@@ -60,11 +64,11 @@ final routerProvider = Provider(
           builder: (context, state) => const ChatsScreen(),
           routes: [
             GoRoute(
-              path: ":userId",
+              path: ":chatId",
               name: ChatDetailScreen.routeName,
               builder: (context, state) {
-                final userId = state.pathParameters['userId']!;
-                return ChatDetailScreen(userId: userId);
+                final chatId = state.pathParameters['chatId']!;
+                return ChatDetailScreen(chatId: chatId);
               },
             ),
           ],
