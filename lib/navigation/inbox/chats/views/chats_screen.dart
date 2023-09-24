@@ -30,8 +30,10 @@ class _ChatsScreenState extends ConsumerState<ChatsScreen> {
 
   void _delDirectMessage(int index) {}
 
-  void _goChatDetail(ChatsModel chatroom) {
-    print('ChatDetailScreen.routeName : ${ChatDetailScreen.routeName}');
+  Future<void> _goChatDetail(ChatsModel chatroom) async {
+    print('chats 호출전');
+    await ref.read(chatsProvider.notifier).getChatroom(chatroom.chatId);
+    print('chats 호출후');
     context.pushNamed(
       ChatDetailScreen.routeName,
       pathParameters: {

@@ -63,4 +63,14 @@ class ChatsModel {
       joiner: joiner ?? this.joiner,
     );
   }
+
+  ChatsModel.empty()
+      : chatId = "",
+        creator = "",
+        title = "",
+        titleAvatar = "",
+        recentMsg = "",
+        createAt = 0,
+        changeAt = 0,
+        joiner = [];
 }

@@ -9,6 +9,16 @@ class ChatsRepo {
     final ref = await _db.collection('chatroom').add(chatData.toJson());
     await ref.update({'chatId': ref.id});
   }
+
+  Future<Map<String, dynamic>?> getChatroom(String chatId) async {
+    final chatData = await _db.collection('chatroom').doc(chatId).get();
+    return chatData.data();
+  }
+
+  Future<void> updateChatroom(
+      {required String chatId, required Map<String, dynamic> chatData}) async {
+    await _db.collection('chatroom').doc(chatId).update(chatData);
+  }
 }
 
 final chatsRepo = Provider((ref) => ChatsRepo());

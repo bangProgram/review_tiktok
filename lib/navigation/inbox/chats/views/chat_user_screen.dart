@@ -43,7 +43,7 @@ class _ChatUserScreenState extends ConsumerState<ChatUserScreen> {
   }
 
   void creatChat() async {
-    await ref.read(chatProvider.notifier).creatChat(setJoiner);
+    await ref.read(chatsProvider.notifier).creatChat(setJoiner);
     Navigator.of(context).pop();
   }
 

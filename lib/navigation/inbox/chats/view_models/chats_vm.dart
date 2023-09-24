@@ -7,11 +7,13 @@ import 'package:review_tiktok/navigation/inbox/chats/models/chats_model.dart';
 import 'package:review_tiktok/navigation/inbox/chats/repos/chats_repo.dart';
 import 'package:review_tiktok/navigation/profile/models/profile_user_model.dart';
 
-class ChatsVM extends AsyncNotifier<void> {
+class ChatsVM extends AsyncNotifier<ChatsModel> {
   late final ChatsRepo _chatsRepo;
   @override
-  FutureOr<void> build() {
+  FutureOr<ChatsModel> build() {
+    print('chats 빌드 시점');
     _chatsRepo = ref.read(chatsRepo);
+    return ChatsModel.empty();
   }
 
   Future<void> creatChat(List<ProfileUserModel> setJoiner) async {
@@ -33,9 +35,17 @@ class ChatsVM extends AsyncNotifier<void> {
         changeAt: DateTime.now().millisecondsSinceEpoch,
         joiner: joiner));
   }
+
+  Future<void> getChatroom(String chatId) async {
+    state = await AsyncValue.guard(() async {
+      final chatData = await _chatsRepo.getChatroom(chatId);
+      if (chatData == null) return ChatsModel.empty();
+      return ChatsModel.fromJson(chatData);
+    });
+  }
 }
 
-final chatProvider = AsyncNotifierProvider<ChatsVM, void>(
+final chatsProvider = AsyncNotifierProvider<ChatsVM, ChatsModel>(
   () => ChatsVM(),
 );
 
