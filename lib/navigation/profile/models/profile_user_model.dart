@@ -6,6 +6,7 @@ class ProfileUserModel {
   final String bio;
   final String link;
   final String avatarURL;
+  final String token;
   final bool hasAvatar;
 
   ProfileUserModel({
@@ -16,6 +17,7 @@ class ProfileUserModel {
     required this.bio,
     required this.link,
     required this.avatarURL,
+    required this.token,
     required this.hasAvatar,
   });
 
@@ -27,6 +29,7 @@ class ProfileUserModel {
         name = "",
         uid = "",
         avatarURL = "",
+        token = "",
         hasAvatar = false;
 
   ProfileUserModel.fromJson(Map<String, dynamic> json)
@@ -37,6 +40,7 @@ class ProfileUserModel {
         link = json["link"],
         bio = json["bio"],
         avatarURL = json["avatarURL"],
+        token = json["token"],
         hasAvatar = json["hasAvatar"];
 
   Map<String, dynamic> tojson() {
@@ -48,6 +52,7 @@ class ProfileUserModel {
       "bio": bio,
       "link": link,
       "avatarURL": avatarURL,
+      "token": token,
       "hasAvatar": hasAvatar,
     };
   }
@@ -61,6 +66,7 @@ class ProfileUserModel {
       bio: data['bio'] ?? bio,
       link: data['link'] ?? link,
       avatarURL: data['avatarURL'] ?? avatarURL,
+      token: data['token'] ?? token,
       hasAvatar: data['hasAvatar'] ?? hasAvatar,
     );
   }

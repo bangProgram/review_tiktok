@@ -74,6 +74,7 @@ class UserSettingScreen extends ConsumerWidget {
                           ref
                               .read(loginVMProvider.notifier)
                               .userLogout(context);
+                          Navigator.of(context).pop();
                         },
                       ),
                       TextButton(

@@ -18,6 +18,11 @@ class ProfileUserRepo {
     await _db.collection('users').doc(uid).update(data.tojson());
   }
 
+  Future<void> updateProfileByJson(
+      String uid, Map<String, dynamic> data) async {
+    await _db.collection('users').doc(uid).update(data);
+  }
+
   Future<QuerySnapshot<Map<String, dynamic>>> findProfileList(
       String uid) async {
     return await _db.collection('users').where('uid', isNotEqualTo: uid).get();
