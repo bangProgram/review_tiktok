@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/navigation/profile/repos/profile_user_repo.dart';
 
@@ -14,6 +13,8 @@ class NotificationService extends FamilyAsyncNotifier<void, BuildContext> {
   @override
   FutureOr<void> build(BuildContext context) async {
     print('token init');
+
+    await updateToken();
     await initListener(context);
     _messaging.onTokenRefresh.listen((newToken) async {
       updateToken(token: newToken);
@@ -28,16 +29,14 @@ class NotificationService extends FamilyAsyncNotifier<void, BuildContext> {
     }
 
     _profileUserRepo = ref.read(profileUserRepo);
-    final isLogin = ref.read(authRepo).isLogin;
+    final auth = ref.read(authRepo);
     print('token setup');
-    if (isLogin) {
-      final loginUser = ref.read(loginVMProvider).value!;
-      print('token setup user : ${loginUser.email}');
-      await _profileUserRepo.updateUser(
-        loginUser.uid,
-        loginUser.copyWith(
-          {'token': token ?? newToken},
-        ),
+    if (auth.isLogin) {
+      final user = auth.user!;
+      print('token setup user : ${user.email}');
+      await _profileUserRepo.updateProfileByJson(
+        user.uid,
+        {'token': token ?? newToken},
       );
     }
   }
@@ -76,19 +75,6 @@ class NotificationService extends FamilyAsyncNotifier<void, BuildContext> {
       }
     }
   }
-
-  Future<void> setupInteractedMessage(BuildContext context) async {
-    RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      handleMessage(initialMessage);
-    }
-
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
-  }
-
-  void handleMessage(RemoteMessage message) {}
 }
 
 final notificationProvider =
