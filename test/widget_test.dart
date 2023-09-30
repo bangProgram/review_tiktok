@@ -1,30 +1,54 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:review_tiktok/main.dart';
+import 'package:review_tiktok/account/signup/widgets/nextpage_button_widget.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+  group("From button tests", () {
+    testWidgets("Invalid state form button", (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: NextPageButtonWidget(
+                funtcion: () {}, text: 'Next', valid: false),
+          ),
+        ),
+      );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      expect(find.text("Next"), findsOneWidget);
+      expect(tester.firstWidget<Text>(find.byType(Text)).style!.color,
+          Colors.black);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    testWidgets("Valid state form button", (WidgetTester tester) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child:
+              NextPageButtonWidget(funtcion: () {}, text: 'Next', valid: true),
+        ),
+      );
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      expect(find.text("Next"), findsOneWidget);
+      expect(tester.firstWidget<Text>(find.byType(Text)).style!.color,
+          Colors.white);
+    });
+
+    testWidgets("Invalid State Darkmode", (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MediaQuery(
+          data: const MediaQueryData(platformBrightness: Brightness.dark),
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: NextPageButtonWidget(
+                funtcion: () {}, text: 'Next', valid: false),
+          ),
+        ),
+      );
+
+      expect(tester.firstWidget<Text>(find.byType(Text)).style!.color,
+          Colors.black);
+    });
   });
 }
