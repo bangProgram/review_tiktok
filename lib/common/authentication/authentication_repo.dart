@@ -26,6 +26,10 @@ class AuthenticationRepo {
   Future<UserCredential> githubLogin() async {
     return await _firebaseAuth.signInWithProvider(GithubAuthProvider());
   }
+
+  Future<void> userDelete() async {
+    await _firebaseAuth.currentUser?.delete();
+  }
 }
 
 final authRepo = Provider((ref) => AuthenticationRepo());

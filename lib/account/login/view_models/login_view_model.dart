@@ -51,12 +51,14 @@ class LoginViewModel extends AsyncNotifier<ProfileUserModel> {
         return userModel;
       },
     );
-    await ref
-        .read(notificationProvider(context).notifier)
-        .updateToken(token: null);
+
     if (state.hasError) {
       showFirebaseError(context, state.error);
     } else {
+      ref.read(notificationProvider(context).notifier).state =
+          const AsyncValue.loading();
+
+      ref.read(profileUserProvider.notifier).state = const AsyncValue.loading();
       context.go(MainNavScreen.routeURL);
     }
   }

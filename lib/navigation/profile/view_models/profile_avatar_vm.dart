@@ -18,12 +18,14 @@ class ProfileAvatarVM extends AsyncNotifier<void> {
     state = const AsyncValue.loading();
     final uid = ref.read(authRepo).user!.uid;
     final uploadTask = await _profileAvatarRepo.uploadAvatar(uid, file);
-    final avatarURL = await uploadTask.snapshot.ref.getDownloadURL();
-    state = await AsyncValue.guard(
-      () async => await ref
-          .read(profileUserProvider.notifier)
-          .updateProfile({"hasAvatar": true, 'avatarURL': avatarURL}),
-    );
+    if (uploadTask.metadata != null) {
+      final avatarURL = await uploadTask.ref.getDownloadURL();
+      state = await AsyncValue.guard(
+        () async => await ref
+            .read(profileUserProvider.notifier)
+            .updateProfile({"hasAvatar": true, 'avatarURL': avatarURL}),
+      );
+    }
   }
 }
 

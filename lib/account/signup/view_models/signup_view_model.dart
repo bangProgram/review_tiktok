@@ -4,16 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/interests/views/interest_screen.dart';
+import 'package:review_tiktok/account/signup/repos/signup_repo.dart';
 import 'package:review_tiktok/common/authentication/authentication_repo.dart';
+import 'package:review_tiktok/common/notification/notification_service.dart';
+import 'package:review_tiktok/navigation/profile/models/profile_user_model.dart';
 import 'package:review_tiktok/navigation/profile/view_models/profile_user_vm.dart';
 import 'package:review_tiktok/utils.dart';
 
 class SignupViewModel extends AsyncNotifier<void> {
   late final AuthenticationRepo _authRepo;
+  late final SignupRepo _signupRepo;
 
   @override
   FutureOr<void> build() {
     _authRepo = ref.read(authRepo);
+    _signupRepo = ref.read(signupRepo);
   }
 
   Future<void> userSignup(BuildContext context) async {
@@ -25,17 +30,31 @@ class SignupViewModel extends AsyncNotifier<void> {
         user['password'],
       );
 
-      final data = {...user, "uid": credential.user!.uid};
       if (credential.user != null) {
-        print('여기는 들어가냐?');
-        await ref
-            .read(profileUserProvider.notifier)
-            .createUser(credential, data);
+        final uId = credential.user!.uid;
+        print('Signup Repo uId : $uId');
+        final userData = ProfileUserModel(
+            uid: uId,
+            name: user['name'],
+            email: user['email'],
+            birthday: user['birthday'],
+            bio: '',
+            link: '',
+            avatarURL: '',
+            token: '',
+            hasAvatar: false);
+        await _signupRepo.signupUserByMap(uId, userData);
       }
     });
     if (state.hasError) {
+      await _authRepo.userDelete();
+      await _authRepo.userLogout();
       showFirebaseError(context, state.error);
     } else {
+      ref.read(notificationProvider(context).notifier).state =
+          const AsyncValue.loading();
+
+      ref.read(profileUserProvider.notifier).state = const AsyncValue.loading();
       context.goNamed(InterestScreen.routeName);
     }
   }

@@ -17,15 +17,19 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
     _profileUserRepo = ref.read(profileUserRepo);
     if (_authenticationRepo.isLogin) {
       final user = ref.read(loginVMProvider).value;
+      print('ProfileUserVM : $user');
       if (user != null) {
+        state = AsyncValue.data(user);
         return user;
       }
     }
+    print('ProfileUserVM init Data');
+    state = AsyncValue.data(ProfileUserModel.empty());
     return ProfileUserModel.empty();
   }
 
   Future<void> createUser(
-      UserCredential credential, Map<dynamic, dynamic> data) async {
+      UserCredential credential, Map<String, dynamic> data) async {
     if (credential.user == null) {
       throw Exception('credential Error');
     }

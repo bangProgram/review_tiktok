@@ -19,6 +19,8 @@ class NotificationService extends FamilyAsyncNotifier<void, BuildContext> {
     _messaging.onTokenRefresh.listen((newToken) async {
       updateToken(token: newToken);
     });
+
+    state = const AsyncValue.data('');
   }
 
   Future<void> updateToken({String? token}) async {

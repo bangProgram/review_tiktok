@@ -116,10 +116,9 @@ class _UserProfileScreenState extends ConsumerState<UserProfileScreen> {
                             child: CircleAvatar(
                               radius: Sizes.size40,
                               foregroundImage: data.hasAvatar
-                                  ? NetworkImage(
-                                      'https://firebasestorage.googleapis.com/v0/b/jb-tiktok-clone.appspot.com/o/users%2F${data.uid}?alt=media&token=5a7386a5-131c-478a-a22b-4a56c62bd7f5')
+                                  ? NetworkImage(data.avatarURL)
                                   : null,
-                              child: const Text('Junbang'),
+                              child: Text(data.name),
                             ),
                           ),
                           Gaps.v10,
