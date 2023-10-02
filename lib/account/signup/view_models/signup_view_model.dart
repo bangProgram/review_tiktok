@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:review_tiktok/account/interests/views/interest_screen.dart';
+import 'package:review_tiktok/account/login/view_models/login_view_model.dart';
 import 'package:review_tiktok/account/signup/repos/signup_repo.dart';
 import 'package:review_tiktok/common/authentication/authentication_repo.dart';
 import 'package:review_tiktok/common/notification/notification_service.dart';
@@ -24,6 +25,7 @@ class SignupViewModel extends AsyncNotifier<void> {
   Future<void> userSignup(BuildContext context) async {
     state = const AsyncValue.loading();
     final user = ref.read(signupState);
+    ProfileUserModel userData = ProfileUserModel.empty();
     state = await AsyncValue.guard(() async {
       final credential = await _authRepo.userSignup(
         user['email'],
@@ -33,7 +35,7 @@ class SignupViewModel extends AsyncNotifier<void> {
       if (credential.user != null) {
         final uId = credential.user!.uid;
         print('Signup Repo uId : $uId');
-        final userData = ProfileUserModel(
+        userData = ProfileUserModel(
             uid: uId,
             name: user['name'],
             email: user['email'],
@@ -51,10 +53,7 @@ class SignupViewModel extends AsyncNotifier<void> {
       await _authRepo.userLogout();
       showFirebaseError(context, state.error);
     } else {
-      ref.read(notificationProvider(context).notifier).state =
-          const AsyncValue.loading();
-
-      ref.read(profileUserProvider.notifier).state = const AsyncValue.loading();
+      ref.read(loginVMProvider.notifier).state = AsyncValue.data(userData);
       context.goNamed(InterestScreen.routeName);
     }
   }

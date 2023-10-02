@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:review_tiktok/constants/sizes.dart';
-import 'package:review_tiktok/navigation/profile/view_models/profile_avatar_vm.dart';
 import 'package:review_tiktok/navigation/profile/view_models/profile_user_vm.dart';
 
 class UserAvatarWidget extends ConsumerWidget {
@@ -29,14 +28,22 @@ class UserAvatarWidget extends ConsumerWidget {
     if (xfile != null) {
       final file = File(xfile.path);
       print('screen file? $file');
-      await ref.read(profileAvatarProvider.notifier).uploadAvatar(file);
+      await ref.read(profileUserProvider.notifier).uploadAvatar(file);
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(profileUserProvider).isLoading
-        ? Container(
+    return ref.watch(profileUserProvider).when(
+          error: (error, stackTrace) => Container(
+            width: Sizes.size72,
+            height: Sizes.size72,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              shape: BoxShape.circle,
+            ),
+          ),
+          loading: () => Container(
             width: Sizes.size72,
             height: Sizes.size72,
             decoration: BoxDecoration(
@@ -46,16 +53,16 @@ class UserAvatarWidget extends ConsumerWidget {
             child: const Center(
               child: CircularProgressIndicator(),
             ),
-          )
-        : GestureDetector(
+          ),
+          data: (data) => GestureDetector(
             onTap: () => _uploadAvatar(ref),
             child: CircleAvatar(
               radius: Sizes.size40,
-              foregroundImage: hasAvatar
-                  ? NetworkImage(ref.read(profileUserProvider).value!.avatarURL)
-                  : null,
-              child: Text(name),
+              foregroundImage:
+                  data.hasAvatar ? NetworkImage(data.avatarURL) : null,
+              child: Text(data.name),
             ),
-          );
+          ),
+        );
   }
 }

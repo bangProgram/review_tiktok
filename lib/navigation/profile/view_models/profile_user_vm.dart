@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,6 +71,18 @@ class ProfileUserVM extends AsyncNotifier<ProfileUserModel> {
 
   Future<void> reloadProfileByModel(ProfileUserModel user) async {
     state = AsyncValue.data(user);
+  }
+
+  Future<void> uploadAvatar(File file) async {
+    state = const AsyncValue.loading();
+    final uid = ref.read(authRepo).user!.uid;
+    final uploadTask = await _profileUserRepo.uploadAvatar(uid, file);
+    if (uploadTask.metadata != null) {
+      final avatarURL = await uploadTask.ref.getDownloadURL();
+      final ProfileUserModel userData =
+          state.value!.copyWith({"hasAvatar": true, 'avatarURL': avatarURL});
+      state = AsyncValue.data(userData);
+    }
   }
 }
 
